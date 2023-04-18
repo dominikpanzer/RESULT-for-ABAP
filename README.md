@@ -3,10 +3,16 @@
 Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful or it can fail and the caller needs to know.  Result indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
 
 ## Why use RESULT for ABAP instead of Exceptions
-* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations et.
+* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc.
 * Exception are often being used as a fancy form of the GOTO-statement. You often don't know where they will be catched. If they get catched at all.
 * Exceptions lead to hard to read code for example when many different exceptions have to be catched.
 * Exceptions sometimes are not really helpful, because people tend to wrap all code intro a TRY...CATCH-block for CX_ROOT.
+* Exceptions tend to return only one error, but what if you have multiple errors?
+* Often command-methods just return a value like "OK" which is true or false. But no additional error values.
+* Often query-methods just return the result of a query and when the result is empty, then this represents an error. But what was the reason for the error?
+* Other methods export two values: the actual value and an optional error message. But now you can only use EXPORTING and not RETURNING, because there are two parameters. This leads to hard to read code. Ideally a method should only return one value.
+* You could use a structure (value, error_message) to solve that problem. RESULT for ABAP is a comfortable object oriented way of doing this - a standardized solution. 🦖
+
 
 ## Okay, show me an example
 ### Creating successful results
