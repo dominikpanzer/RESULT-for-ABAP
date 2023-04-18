@@ -32,11 +32,6 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
       RETURNING
         VALUE(result) TYPE abap_boolean.
 
-* test list:
-* fail_if with error message
-* ok_if with error message
-* combine with one and both of them failed -> multiple error message ? or only first one?
-* combine multiple and all results failed -> multiple error_message? or only first one?
 ENDCLASS.
 
 
