@@ -24,6 +24,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_if_true FOR TESTING RAISING cx_static_check.
     METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
     METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
+    METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true
       RETURNING
         VALUE(result) TYPE abap_boolean.
@@ -33,7 +34,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
 
 * test list:
 * fail_if with error message
-* ok_fo with error message
+* ok_if with error message
 * combine with one and both of them failed -> multiple error message ? or only first one?
 * combine multiple and all results failed -> multiple error_message? or only first one?
 ENDCLASS.
@@ -157,6 +158,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD combine_multiple_all_failed.
     DATA results TYPE zcl_result=>ty_results.
 
+* arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( 'no' ).
     DATA(result_three) = zcl_result=>fail( 'argh' ).
@@ -164,14 +166,17 @@ CLASS result_tests IMPLEMENTATION.
     APPEND result_two TO results.
     APPEND result_three TO results.
 
+* act
     DATA(final_result) = result_one->combine_with_multiple( results ).
 
+* assert
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
 
   METHOD combine_multiple_one_failed.
     DATA results TYPE zcl_result=>ty_results.
 
+* arrange
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>fail( error_message ).
     DATA(result_three) = zcl_result=>ok( ).
@@ -179,8 +184,10 @@ CLASS result_tests IMPLEMENTATION.
     APPEND result_two TO results.
     APPEND result_three TO results.
 
+* act
     DATA(final_result) = result_one->combine_with_multiple( results ).
 
+* assert
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
 
@@ -201,7 +208,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD not_failure_if_false.
-* fails only if paramter is true
+* fails only if parameter is true
     DATA(result) = zcl_result=>fail_if( this_returns_false( ) ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'not OK, but it should be OK' exp = abap_true act = result->is_ok( ) ).
@@ -214,12 +221,28 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD not_ok_if_false.
-* ok only if paramter is true
+* ok only if parameter is true
     DATA(result) = zcl_result=>ok_if( this_returns_false( ) ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_false act = result->is_ok( ) ).
   ENDMETHOD.
 
+  METHOD combine_multiple_two_failed.
+    DATA results TYPE zcl_result=>ty_results.
+
+* arrange
+    DATA(result_one) = zcl_result=>ok( ).
+    DATA(result_two) = zcl_result=>fail( error_message ).
+    DATA(result_three) = zcl_result=>fail( error_message ).
+
+    results = VALUE #( ( result_two ) ( result_three ) ).
+
+* act
+    DATA(final_result) = result_one->combine_with_multiple( results ).
+
+* assert
+    cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
+  ENDMETHOD.
 
 
   METHOD this_returns_true.
