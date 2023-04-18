@@ -23,6 +23,7 @@ CLASS result_tets DEFINITION FINAL FOR TESTING
     METHODS not_failure_if_false FOR TESTING RAISING cx_static_check.
     METHODS ok_if_true FOR TESTING RAISING cx_static_check.
     METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
+    METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true
       RETURNING
         VALUE(result) TYPE abap_boolean.
@@ -30,9 +31,9 @@ CLASS result_tets DEFINITION FINAL FOR TESTING
       RETURNING
         VALUE(result) TYPE abap_boolean.
 
-* test list
-* exception when value is accessed when failure
-* New features:
+* test list:
+* fail_if with error message
+* ok_fo with error message
 * combine with one and both of them failed -> multiple error message ? or only first one?
 * combine multiple and all results failed -> multiple error_message? or only first one?
 ENDCLASS.
@@ -72,6 +73,16 @@ CLASS result_tets IMPLEMENTATION.
     value = result->get_value( )->*.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value ).
+  ENDMETHOD.
+
+  METHOD ok_result_with_object_as_value.
+    DATA(random_object_reference) = zcl_result=>ok(  ).
+    DATA value TYPE REF TO zcl_result.
+
+    DATA(result) = zcl_result=>ok( random_object_reference ).
+    value = result->get_value( )->*.
+
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = value ).
   ENDMETHOD.
 
   METHOD failed_result_with_error.
@@ -196,13 +207,13 @@ CLASS result_tets IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'not OK, but it should be OK' exp = abap_true act = result->is_ok( ) ).
   ENDMETHOD.
 
-    METHOD ok_if_true.
+  METHOD ok_if_true.
     DATA(result) = zcl_result=>ok_if( this_returns_true( ) ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = result->is_ok( ) ).
   ENDMETHOD.
 
-   METHOD not_ok_if_false.
+  METHOD not_ok_if_false.
 * ok only if paramter is true
     DATA(result) = zcl_result=>ok_if( this_returns_false( ) ).
 
