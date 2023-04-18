@@ -80,7 +80,9 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
 :black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
 :black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
-:black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES`ke works
+:black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES` works fine
+:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can bei retrieved with `GET_ERROR_MESSAGES`
+:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK result it throws
 
 ## How to install RESULT for ABAP
 You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
