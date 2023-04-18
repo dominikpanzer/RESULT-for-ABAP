@@ -51,14 +51,15 @@ Use the RESULT-object for flow control as you like:
 DATA new_partner TYPE bu_partner.
 DATA(result) = do_something( partner ).
 
-IF result.is_ok( ).
-new_partner = result.get_value( )->*.
-* do something with partner, i.e. persistence
-ENDIF result.is_failure( ).
+* guarding
+IF result.is_failure( ).
 DATA(error_message) = result.get_error_message( ).
 * log / error for webservice
+EXIT.
 ENDIF.
 
+new_partner = result.get_value( )->*.
+* do something with partner, i.e. persistence
 ```
 
 ## Test List
