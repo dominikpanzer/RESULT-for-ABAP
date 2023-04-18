@@ -35,18 +35,23 @@ METHOD do_something.
 * 100s of lines of arcane logic
 
 * hooray, no problems at all
-result = zcl_result=>ok( ).
+result = zcl_result=>ok( 100040340 ).
 ENDMETHOD.
 ```
 ### Process a RESULT
 Use the RESULT-object for flow control as you like:
 ```
 * call a method which returns a result
+DATA new_partner TYPE bu_partner.
 DATA(result) = do_something( partner ).
 
-IF result.
-
-endif.
+IF result.is_ok( ).
+new_partner = result.get_value( )->*.
+* do something with partner, i.e. persistence
+ENDIF result.is_failure( ).
+DATA(error_message) = result.get_error_message( ).
+* log / error for webservice
+ENDIF.
 
 ```
 
