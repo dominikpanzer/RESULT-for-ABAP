@@ -55,11 +55,39 @@ ENDIF.
 
 ```
 
+## Test List
+I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It my todo-list. Often it is domain-centric, this one is quite technical.
+
+|Test|
+|----|
+:white_check_mark: first release somehow seems to works
+:black_square_button: when `FAIL_IF` gets called with an optional error message "a wild error occured", the error message gets stored when the RESULT is a failure
+:black_square_button: when `FAIL_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return "a wild error occurred" when the RESULT is a failure
+:black_square_button: when `FAIL_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return an exception, when the RESULT is OK
+:black_square_button: when `OK_IF` gets called with an optional error message "a wild error occured", the error message gets stored when the RESULT is a failure
+:black_square_button: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return "a wild error occurred" when the RESULT is a failure
+:black_square_button: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return an exception, when the RESULT is OK
+:black_square_button: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_VALUE` a initial value when the RESULT is OK
+:black_square_button: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` gets called once, the Metadata gets stored
+:black_square_button: when the method `GET_ALL_METADATA( )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a table with one entry `(name, David Hasselhoff)`
+:black_square_button: when the method `GET_METADATA( name )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a single entry (name, David Hasselhoff)
+:black_square_button: when the method `GET_ALL_METADATA( )` gets called without `WITH_METDATA` being called before, it returns an initial table
+:black_square_button: when the method `GET_METADATA( date )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns an initial value
+:black_square_button: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` is called with the same key twice, no duplicates get stored and it throws
+:black_square_button: when the method `WITH_METADATA` is called with an initial key value the methods throws
+:black_square_button: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
+:black_square_button: when the method `WITH_METADATA( key = "name" value = value )` and value is not convertible into a string (struc, table, object) it throws
+:black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
+:black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
+:black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
+:black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES`ke works
+
 ## How to install RESULT for ABAP
 You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
 
+## How to support
 
-Enjoy! PRs are welcome.
+PRs are welcome!
 
 Greetings, 
 Dominik
