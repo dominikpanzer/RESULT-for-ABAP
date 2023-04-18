@@ -1,4 +1,4 @@
-CLASS result_tets DEFINITION FINAL FOR TESTING
+CLASS result_tests DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
 
@@ -39,7 +39,7 @@ CLASS result_tets DEFINITION FINAL FOR TESTING
 ENDCLASS.
 
 
-CLASS result_tets IMPLEMENTATION.
+CLASS result_tests IMPLEMENTATION.
 
   METHOD create_ok_result.
     DATA(result) = zcl_result=>ok( ).
