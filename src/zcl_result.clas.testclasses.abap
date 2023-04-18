@@ -19,6 +19,16 @@ CLASS result_tets DEFINITION FINAL FOR TESTING
     METHODS combine_multiple_one_failed FOR TESTING RAISING cx_static_check.
     METHODS cant_access_value_when_failure FOR TESTING RAISING cx_static_check.
     METHODS combine_multiple_no_entries FOR TESTING RAISING cx_static_check.
+    METHODS fail_if_true FOR TESTING RAISING cx_static_check.
+    METHODS not_failure_if_false FOR TESTING RAISING cx_static_check.
+    METHODS ok_if_true FOR TESTING RAISING cx_static_check.
+    METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
+    METHODS this_returns_true
+      RETURNING
+        VALUE(result) TYPE abap_boolean.
+    METHODS this_returns_false
+      RETURNING
+        VALUE(result) TYPE abap_boolean.
 
 * test list
 * exception when value is accessed when failure
@@ -162,6 +172,7 @@ CLASS result_tets IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
+
   METHOD combine_multiple_no_entries.
     DATA results TYPE zcl_result=>ty_results.
 
@@ -171,4 +182,42 @@ CLASS result_tets IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
+
+  METHOD fail_if_true.
+    DATA(result) = zcl_result=>fail_if( this_returns_true( ) ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = result->is_failure( ) ).
+  ENDMETHOD.
+
+  METHOD not_failure_if_false.
+* fails only if paramter is true
+    DATA(result) = zcl_result=>fail_if( this_returns_false( ) ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'not OK, but it should be OK' exp = abap_true act = result->is_ok( ) ).
+  ENDMETHOD.
+
+    METHOD ok_if_true.
+    DATA(result) = zcl_result=>ok_if( this_returns_true( ) ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = result->is_ok( ) ).
+  ENDMETHOD.
+
+   METHOD not_ok_if_false.
+* ok only if paramter is true
+    DATA(result) = zcl_result=>ok_if( this_returns_false( ) ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_false act = result->is_ok( ) ).
+  ENDMETHOD.
+
+
+
+  METHOD this_returns_true.
+    result = abap_true.
+  ENDMETHOD.
+
+
+  METHOD this_returns_false.
+    result = abap_false.
+  ENDMETHOD.
+
 ENDCLASS.
