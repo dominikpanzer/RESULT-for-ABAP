@@ -13,7 +13,7 @@
     }
   ],
   "syntax": {
-    "version": "v702",
+    "version": "v754",
     "errorNamespace": "^(Z|Y|LT?CL_|TY_|LIF_|.*ABAPGIT)",
     "globalConstants": [
       "abap_func_exporting",
