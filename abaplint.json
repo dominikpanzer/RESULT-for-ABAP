@@ -20,7 +20,7 @@
     }
   ],
   "syntax": {
-    "version": "v754",
+    "version": "v740sp05",
     "errorNamespace": ".",
     "globalConstants": ["srext_ext_xslt_source"]
   },
