@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "unit": "npm run downport && rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs",
-    "downport": "rm -rf downport && cp -r src downport && cp test/*.abap downport && cp test/*.xml downport && abaplint --fix abaplint-downport.jsonc",
+    "downport": "rm -rf downport && cp -r src downport && abaplint --fix abaplint-downport.json",
     "test": "npm run unit",
     "abaplint": "abaplint --format codeframe"
   },
