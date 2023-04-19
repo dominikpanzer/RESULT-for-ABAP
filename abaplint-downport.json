@@ -18,7 +18,7 @@
     "begin_end_names": true,
     "check_ddic": true,
     "check_include": true,
-    "check_syntax": true,
+    "check_syntax": false,
     "global_class": true,
     "implement_methods": true,
     "definitions_top": true,
@@ -26,7 +26,7 @@
     "parser_error": true,
     "parser_missing_space": true,
     "superclass_final": true,
-    "unknown_types": false,
-    "xml_consistency": false
+    "unknown_types": true,
+    "xml_consistency": true
   }
 }
