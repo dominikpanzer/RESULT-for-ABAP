@@ -26,8 +26,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
     METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
-    METHODS this_returns_false
-      RETURNING
+    METHODS this_returns_false RETURNING
         VALUE(result) TYPE abap_boolean.
 
 ENDCLASS.
