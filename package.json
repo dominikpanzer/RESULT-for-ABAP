@@ -2,7 +2,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "unit": "rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs",
+    "unit": "npm run downport && rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs",
+    "downport": "rm -rf downport && cp -r src downport && cp test/*.abap downport && cp test/*.xml downport && abaplint --fix abaplint-downport.jsonc",
     "test": "npm run unit",
     "abaplint": "abaplint --format codeframe"
   },
