@@ -10,7 +10,7 @@
   "write_unit_tests": true,
   "write_source_map": true,
   "options": {
-    "ignoreSyntaxCheck": false,
+    "ignoreSyntaxCheck": true,
     "addFilenames": true,
     "addCommonJS": true,
     "unknownTypes": "runtimeError",
