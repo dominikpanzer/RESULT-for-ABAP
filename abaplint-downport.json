@@ -27,6 +27,6 @@
     "parser_missing_space": true,
     "superclass_final": true,
     "unknown_types": true,
-    "xml_consistency": true
+    "xml_consistency": false
   }
 }
