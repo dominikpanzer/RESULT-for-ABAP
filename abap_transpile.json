@@ -1,19 +1,38 @@
 {
-  "input_folder": "src",
-  "input_filter": [],
-  "output_folder": "output",
-  "libs": [
+  "global": {
+    "files": "/downport/**/*.*"
+  },
+  "dependencies": [
     {
-      "url": "https://github.com/open-abap/open-abap"
+      "url": "https://github.com/open-abap/open-abap-core",
+      "files": "/src/**/*.*"
     }
   ],
-  "write_unit_tests": true,
-  "write_source_map": true,
-  "options": {
-    "ignoreSyntaxCheck": true,
-    "addFilenames": true,
-    "addCommonJS": true,
-    "unknownTypes": "runtimeError",
-    "skip": []
+  "syntax": {
+    "version": "v702",
+    "errorNamespace": "."
+  },
+  "rules": {
+    "downport": true,
+
+    "check_syntax": true,
+    "definitions_top": true,
+    "parser_error": true,
+
+    // disabled,
+    "check_include": false,
+    "begin_end_names": false,
+    "check_ddic": false,
+    "global_class": false,
+    "implement_methods": false,
+    "method_implemented_twice": false,
+    "parser_missing_space": false,
+    "superclass_final": false,
+    "unknown_types": false,
+    "xml_consistency": false,
+
+    // stylistic rules
+    "whitespace_end": true,
+    "indentation": true
   }
 }
