@@ -18,7 +18,7 @@
     "begin_end_names": true,
     "check_ddic": true,
     "check_include": true,
-    "check_syntax": false,
+    "check_syntax": true,
     "global_class": true,
     "implement_methods": true,
     "definitions_top": true,
