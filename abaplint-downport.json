@@ -1,0 +1,32 @@
+{
+  "global": {
+    "files": "/downport/**/*.*"
+  },
+  "dependencies": [
+    {
+      "url": "https://github.com/open-abap/open-abap",
+      "files": "/src/**/*.*"
+    }
+  ],
+  "syntax": {
+    "version": "v702",
+    "errorNamespace": "."
+  },
+  "rules": {
+    "downport": true,
+
+    "begin_end_names": true,
+    "check_ddic": true,
+    "check_include": true,
+    "check_syntax": true,
+    "global_class": true,
+    "implement_methods": true,
+    "definitions_top": true,
+    "method_implemented_twice": true,
+    "parser_error": true,
+    "parser_missing_space": true,
+    "superclass_final": true,
+    "unknown_types": true,
+    "xml_consistency": true
+  }
+}
