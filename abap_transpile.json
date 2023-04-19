@@ -1,5 +1,5 @@
 {
-  "input_folder": "src",
+  "input_folder": "downport",
   "input_filter": [],
   "output_folder": "output",
   "libs": [
