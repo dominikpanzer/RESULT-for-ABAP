@@ -18,8 +18,6 @@
     "check_syntax": true,
     "definitions_top": true,
     "parser_error": true,
-
-    // disabled,
     "check_include": false,
     "begin_end_names": false,
     "check_ddic": false,
@@ -30,8 +28,6 @@
     "superclass_final": false,
     "unknown_types": false,
     "xml_consistency": false,
-
-    // stylistic rules
     "whitespace_end": true,
     "indentation": true
   }
