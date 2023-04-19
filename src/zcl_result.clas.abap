@@ -138,6 +138,7 @@ CLASS zcl_result IMPLEMENTATION.
     IF is_ok( ).
       RAISE EXCEPTION TYPE zcx_result_is_no_failure.
     ENDIF.
+
     error_message = me->error_message.
   ENDMETHOD.
 
