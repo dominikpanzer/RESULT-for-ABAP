@@ -1,0 +1,18 @@
+{
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "unit": "rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs",
+    "test": "npm run unit",
+    "abaplint": "abaplint --format codeframe"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dominikpanzer/RESULT-for-ABAP.git"
+  },
+  "devDependencies": {
+    "@abaplint/cli": "^2.93.16",
+    "@abaplint/transpiler-cli": "^2.1.66",
+    "@abaplint/runtime": "^2.1.66"
+  }
+}
