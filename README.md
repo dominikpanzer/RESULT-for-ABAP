@@ -21,6 +21,14 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 DATA(result) = zcl_result=>ok( ).
 * another one with additional information, i.e. the key of an object you created or the object itself
 DATA(result) = zcl_result=>ok( 100040340 ).
+* when a validator returns false
+DATA(result) = zcl_result=>fail_if( validator_returns_false( ) ).
+* when a validator returns false + error message
+DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_false( ) error_message = 'a wild errror occurred' ).
+* when a validator returns true
+DATA(result) = zcl_result=>ok_if( validator_returns_true( ) ).
+* when a validator returns true
+DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error_message = 'a wild errror occurred' ).
 ```
 ### Creating failures
 ```
@@ -28,7 +36,32 @@ DATA(result) = zcl_result=>ok( 100040340 ).
 DATA(result) = zcl_result=>fail( ).
 * with an error message
 DATA(result) = zcl_result=>fail('a wild errror occurred').
+* when a validator returns true
+DATA(result) = zcl_result=>fail_if( validator_returns_true( ) ).
+* when a validator returns true + error message
+DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_true( ) error_message = 'a wild errror occurred' ).
+* when a validator returns false
+DATA(result) = zcl_result=>ok_if( validator_returns_false( ) ).
+* when a validator returns false
+DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild errror occurred' ).
 ```
+### Combining results
+Usually there are many validations at the start of a usecase-method, so you might like to combine their single results into a final big one. The usual usecase here is "validate X variables and all have to be OK, otherwise FAIL and stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you usecase-method if you need the details.
+```
+* combined RESULT is OK
+DATA(result_one) = zcl_result=>ok( ).
+DATA(result_two) = zcl_result=>ok( ).
+DATA(final_result) = result_one->combine_with_one( result_two ).
+
+* combined RESULT is a FAILURE
+DATA results TYPE zcl_result=>ty_results.
+DATA(result_one) = zcl_result=>ok( ).
+ATA(result_two) = zcl_result=>fail( error_message ).
+DATA(result_three) = zcl_result=>fail( error_message ).
+results = VALUE #( ( result_two ) ( result_three ) ).
+DATA(final_result) = result_one->combine_with_multiple( results ).
+```
+
 ### Usage of a result in a method
 Use the RESULT as a RETURNING parameter:
 ```
