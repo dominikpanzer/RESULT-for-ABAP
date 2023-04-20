@@ -92,7 +92,7 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD both_results_are_okay.
-    r_result = xsdbool( is_ok(  ) AND result->is_ok(  ) ).
+    r_result = xsdbool( is_ok( ) AND result->is_ok( ) ).
   ENDMETHOD.
 
 
@@ -142,19 +142,13 @@ CLASS zcl_result IMPLEMENTATION.
     error_message = me->error_message.
   ENDMETHOD.
 
-
-
-
-
   METHOD fail_if.
     IF this_is_true = abap_true.
-      result = zcl_result=>fail(  ).
+      result = zcl_result=>fail( ).
     ELSE.
-      result = zcl_result=>ok(  ).
+      result = zcl_result=>ok( ).
     ENDIF.
   ENDMETHOD.
-
-
 
   METHOD ok_if.
     result = zcl_result=>fail_if( xsdbool( this_is_true <> abap_true ) ).

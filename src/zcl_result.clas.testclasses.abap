@@ -68,7 +68,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_result_with_object_as_value.
-    DATA(random_object_reference) = zcl_result=>ok(  ).
+    DATA(random_object_reference) = zcl_result=>ok( ).
     DATA value TYPE REF TO zcl_result.
 
     DATA(result) = zcl_result=>ok( random_object_reference ).
@@ -80,7 +80,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD failed_result_with_error.
     DATA(result) = zcl_result=>fail( error_message ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'error message not correct' exp = error_message act = result->get_error_message(  ) ).
+    cl_abap_unit_assert=>assert_equals( msg = 'error message not correct' exp = error_message act = result->get_error_message( ) ).
   ENDMETHOD.
 
   METHOD combine_with_one_all_are_ok.
@@ -113,7 +113,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(final_result) = result_one->combine_with_one( result_two ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK but it should be not OK' exp = abap_false act = final_result->is_ok( ) ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message(  ) ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message( ) ).
   ENDMETHOD.
 
   METHOD combine_with_one_and_all_faild.
@@ -123,7 +123,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(final_result) = result_one->combine_with_one( result_two ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK but it should be not OK' exp = abap_false act = final_result->is_ok( ) ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message(  ) ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message( ) ).
   ENDMETHOD.
 
   METHOD cant_access_error_when_ok.
