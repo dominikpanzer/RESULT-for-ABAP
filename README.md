@@ -1,23 +1,23 @@
 # RESULT for ABAP
 
-Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful or it can fail and the caller needs to know.  Result indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
+Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful (OK) or it can fail (FAILURE) and the caller needs to know.  The Result-Pattern indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
 
-## Why use RESULT for ABAP instead of Exceptions
+## Why should I use RESULT for ABAP instead of exceptions?
 * Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc.
 * Exception are often being used as a fancy form of the GOTO-statement. You often don't know where they will be catched. If they get catched at all.
 * Exceptions lead to hard to read code for example when many different exceptions have to be catched.
-* Exceptions sometimes are not really helpful, because people tend to wrap all code intro a TRY...CATCH-block for CX_ROOT.
+* Exceptions sometimes are not really helpful, because people tend to wrap all code into a TRY...CATCH-block for CX_ROOT.
 * Exceptions tend to return only one error, but what if you have multiple errors?
-* Often command-methods just return a value like "OK" which is true or false. But no additional error values.
+* Often command-methods just return a value like "it worked," which is either ABAP_TRUE or ABAP_FALSE. But no additional error values are available which could be shown in the frontend.
 * Often query-methods just return the result of a query and when the result is empty, then this represents an error. But what was the reason for the error?
 * Other methods export two values: the actual value and an optional error message. But now you can only use EXPORTING and not RETURNING, because there are two parameters. This leads to hard to read code. Ideally a method should only return one value.
 * You could use a structure (value, error_message) to solve that problem. RESULT for ABAP is a comfortable object oriented way of doing this - a standardized solution. 🦖
-
+* RESULT enables a fluent coding style compared to try...catch...endtry all over the place.
 
 ## Okay, show me an example
-### Creating successful results
+### Creating successful RESULTs
 ```
-* create a result which represents a success
+* create a RESULT which represents a success (OK)
 DATA(result) = zcl_result=>ok( ).
 * another one with additional information, i.e. the key of an object you created or the object itself
 DATA(result) = zcl_result=>ok( 100040340 ).
@@ -32,7 +32,7 @@ DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error
 ```
 ### Creating failures
 ```
-* create a result which indicates a failure
+* create a RESULT which indicates a FAILURE
 DATA(result) = zcl_result=>fail( ).
 * with an error message
 DATA(result) = zcl_result=>fail('a wild errror occurred').
@@ -46,7 +46,7 @@ DATA(result) = zcl_result=>ok_if( validator_returns_false( ) ).
 DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild errror occurred' ).
 ```
 ### Combining results
-Usually there are many validations at the start of a usecase-method, so you might like to combine their single results into a final big one. The usual usecase here is "validate X variables and all have to be OK, otherwise FAIL and stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you usecase-method if you need the details.
+Usually there are many validations at the start of a usecase-method, so you might like to combine their single RESULTs into a final big one. The usual usecase here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you usecase-method if you need the details.
 ```
 * combined RESULT is OK
 DATA(result_one) = zcl_result=>ok( ).
@@ -62,7 +62,7 @@ results = VALUE #( ( result_two ) ( result_three ) ).
 DATA(final_result) = result_one->combine_with_multiple( results ).
 ```
 
-### Usage of a result in a method
+### Usage of a RESULT in a method
 Use the RESULT as a RETURNING parameter:
 ```
 METHOD do_something IMPORTING partner TYPE bu_partner
@@ -77,7 +77,7 @@ METHOD do_something.
 result = zcl_result=>ok( 100040340 ).
 ENDMETHOD.
 ```
-### Process a RESULT
+### Processing a RESULT
 Use the RESULT-object for flow control as you like:
 ```
 * call a method which returns a result
@@ -96,7 +96,7 @@ new_partner = result.get_value( )->*.
 ```
 
 ## Test List
-I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It my todo-list. Often it is domain-centric, this one is quite technical.
+I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It's my personal todo-list. Often the list is very domain-centric, this one is quite technical.
 
 |Test|
 |----|
@@ -122,14 +122,14 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
 :black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES` works fine
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can bei retrieved with `GET_ERROR_MESSAGES`
-:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK result it throws
+:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK-RESULT it throws :interrobang: or should it just ignore the error message?
 
 ## How to install RESULT for ABAP
 You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
 
-## How to support
+## How to support this project
 
-PRs are welcome!
+PRs are welcome! You can also just pick one of the testlist entries from above and implement the solution or implement your own idea. Fix a bug. Improve the docs... whatever suits you.
 
 Greetings, 
 Dominik
