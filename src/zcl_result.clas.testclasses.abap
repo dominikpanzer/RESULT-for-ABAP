@@ -1,3 +1,5 @@
+CLASS result_tests DEFINITION DEFERRED.
+CLASS zcl_result DEFINITION LOCAL FRIENDS result_tests.
 CLASS result_tests DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
@@ -25,6 +27,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
     METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
     METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
+    METHODS fail_if_saves_error_message FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -237,11 +240,15 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
 
+  METHOD fail_if_saves_error_message.
+    DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_true( ) error_message = error_message ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'didnt store error_message' exp = error_message act = result->error_message ).
+  ENDMETHOD.
 
   METHOD this_returns_true.
     result = abap_true.
   ENDMETHOD.
-
 
   METHOD this_returns_false.
     result = abap_false.
