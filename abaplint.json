@@ -40,7 +40,7 @@
     "unnecessary_chaining": false,
     "7bit_ascii": true,
     "abapdoc": false,
-    "allowed_object_naming": true,
+    "allowed_object_naming": false,
     "allowed_object_types": true,
     "ambiguous_statement": true,
     "avoid_use": false,
@@ -62,7 +62,7 @@
     "cloud_types": true,
     "colon_missing_space": true,
     "commented_code": true,
-    "constructor_visibility_public": true,
+    "constructor_visibility_public": false,
     "contains_tab": true,
     "cyclomatic_complexity": {
       "exclude": [],
@@ -122,7 +122,7 @@
     "msag_consistency": true,
     "names_no_dash": true,
     "nesting": {
-      "exclude": ["zcl_aff_abap_doc_reader"],
+      "exclude": [],
       "depth": 5
     },
     "newline_between_methods": false,
