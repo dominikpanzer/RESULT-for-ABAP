@@ -62,7 +62,8 @@ CLASS result_tests IMPLEMENTATION.
     DATA value LIKE id_of_created_object.
 
     DATA(result) = zcl_result=>ok( id_of_created_object ).
-    value = result->get_value( )->*.
+    DATA(temporary_value) = result->get_value( ).
+    value = temporary_value->*.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value ).
   ENDMETHOD.
@@ -72,7 +73,8 @@ CLASS result_tests IMPLEMENTATION.
     DATA value TYPE REF TO zcl_result.
 
     DATA(result) = zcl_result=>ok( random_object_reference ).
-    value = result->get_value( )->*.
+    DATA(temporary_value) = result->get_value( ).
+    value = temporary_value->*.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = value ).
   ENDMETHOD.
