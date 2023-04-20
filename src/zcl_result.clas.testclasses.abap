@@ -131,7 +131,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD cant_access_error_when_ok.
     TRY.
         DATA(result) = zcl_result=>ok( ).
-        DATA(error_message) = result->get_error_message( ).
+        result->get_error_message( ).
         cl_abap_unit_assert=>fail( ).
       CATCH zcx_result_is_no_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
@@ -141,7 +141,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD cant_access_value_when_failure.
     TRY.
         DATA(result) = zcl_result=>fail( error_message ).
-        DATA(value) = result->get_value( ).
+        result->get_value( ).
         cl_abap_unit_assert=>fail( ).
       CATCH zcx_result_is_not_ok INTO DATA(result_is_not_ok).
         cl_abap_unit_assert=>assert_bound( result_is_not_ok ).
