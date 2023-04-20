@@ -285,8 +285,11 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_if_returns_initial_value.
     DATA value TYPE char1.
+
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) ).
-    value = result->get_value( )->*.
+    DATA(temporary_value) = result->get_value( ).
+    value = temporary_value->*.
+
     cl_abap_unit_assert=>assert_initial( value ).
   ENDMETHOD.
 
