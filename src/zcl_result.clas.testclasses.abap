@@ -254,7 +254,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD fail_if_returns_error_message.
     DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_true( ) error_message = error_message ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'unable to get error_message' exp = error_message act = result->get_error_message(  ) ).
+    cl_abap_unit_assert=>assert_equals( msg = 'unable to get error_message' exp = error_message act = result->get_error_message( ) ).
   ENDMETHOD.
 
   METHOD fail_if_is_ok_throws_value.
