@@ -1,7 +1,7 @@
 {
   "global": {
     "files": "/src/**/*.*",
-    "exclude": ["src/z_generate_repo.prog.abap"],
+    "exclude": [],
     "skipGeneratedGatewayClasses": true,
     "skipGeneratedPersistentClasses": true,
     "skipGeneratedFunctionGroups": true,
@@ -22,7 +22,7 @@
   "syntax": {
     "version": "Cloud",
     "errorNamespace": ".",
-    "globalConstants": ["srext_ext_xslt_source"]
+    "globalConstants": []
   },
   "rules": {
     "align_parameters": false,
@@ -65,7 +65,7 @@
     "constructor_visibility_public": true,
     "contains_tab": true,
     "cyclomatic_complexity": {
-      "exclude": ["zcl_aff_abap_doc_reader"],
+      "exclude": [],
       "max": 20
     },
     "dangerous_statement": false,
@@ -129,8 +129,8 @@
     "no_public_attributes": false,
     "no_yoda_conditions": false,
     "object_naming": {
-      "clas": "^ZC(L|X)\\_AFF\\_",
-      "intf": "^ZIF\\_AFF\\_",
+      "clas": "^ZC(L|X)\\_",
+      "intf": "^ZIF\\_",
       "prog": "^Z"
     },
     "obsolete_statement": true,
@@ -172,10 +172,10 @@
     "unsecure_fae": true,
     "unused_methods": true,
     "unused_types": {
-      "exclude": ["zcl_aff_test_types"]
+      "exclude": []
     },
     "unused_variables": {
-      "exclude": ["zcl_aff_test_types", "zcl_aff_writer.clas.testclasses"]
+      "exclude": []
     },
     "use_bool_expression": true,
     "use_class_based_exceptions": true,
