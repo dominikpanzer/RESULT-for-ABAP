@@ -131,7 +131,11 @@ CLASS zcl_result IMPLEMENTATION.
     IF is_failure( ).
       RAISE EXCEPTION TYPE zcx_result_is_not_ok.
     ENDIF.
-    value = me->value.
+    IF me->value IS NOT BOUND.
+      value = REF #( space ).
+    ELSE.
+      value = me->value.
+    ENDIF.
   ENDMETHOD.
 
   METHOD get_error_message.
