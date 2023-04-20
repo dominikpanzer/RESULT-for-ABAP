@@ -18,4 +18,5 @@ jobs:
     - name: npm run unit
       run: |
         npm install
+        npm run abaplint
         npm run unit
