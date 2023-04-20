@@ -18,10 +18,10 @@ CLASS zcl_result DEFINITION
       RETURNING
                 VALUE(result) TYPE REF TO zcl_result.
     CLASS-METHODS ok_if
-      IMPORTING
-        this_is_true  TYPE abap_boolean
+      IMPORTING this_is_true  TYPE abap_boolean
+                error_message TYPE string OPTIONAL
       RETURNING
-        VALUE(result) TYPE REF TO zcl_result.
+                VALUE(result) TYPE REF TO zcl_result.
 
     METHODS is_failure RETURNING VALUE(is_failure) TYPE abap_boolean.
     METHODS is_ok RETURNING VALUE(is_ok) TYPE abap_boolean.
@@ -151,7 +151,7 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_if.
-    result = zcl_result=>fail_if( xsdbool( this_is_true <> abap_true ) ).
+    result = zcl_result=>fail_if( this_is_true = xsdbool( this_is_true <> abap_true ) error_message = error_message ).
   ENDMETHOD.
 
 ENDCLASS.
