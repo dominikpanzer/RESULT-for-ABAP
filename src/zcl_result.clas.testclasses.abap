@@ -31,6 +31,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS fail_if_returns_error_message FOR TESTING RAISING cx_static_check.
     METHODS fail_if_is_ok_throws_value FOR TESTING RAISING cx_static_check.
     METHODS ok_if_saves_error_message FOR TESTING RAISING cx_static_check.
+    METHODS ok_if_is_failure_throws_error FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -269,6 +270,16 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_false( ) error_message = error_message ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'didnt store error_message' exp = error_message act = result->get_error_message( ) ).
+  ENDMETHOD.
+
+  METHOD ok_if_is_failure_throws_error.
+    TRY.
+        DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) error_message = error_message ).
+        result->get_error_message( ).
+        cl_abap_unit_assert=>fail( ).
+      CATCH zcx_result_is_no_failure INTO DATA(result_is_no_failure).
+        cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
+    ENDTRY.
   ENDMETHOD.
 
   METHOD this_returns_true.
