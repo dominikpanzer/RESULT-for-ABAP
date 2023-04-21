@@ -173,7 +173,7 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD with_metadata.
     result = me.
-    CHECK NOT line_Exists( metadata[ key = key ] ).
+    CHECK NOT line_exists( metadata[ key = key ] ).
     metadata = VALUE #( BASE metadata ( key = key value = REF #( value ) ) ).
   ENDMETHOD.
 
