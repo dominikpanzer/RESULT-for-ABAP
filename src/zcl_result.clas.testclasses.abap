@@ -26,7 +26,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_if_true FOR TESTING RAISING cx_static_check.
     METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
     METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
-    METHODS ok_Result_with_table_as_value FOR TESTING RAISING cx_static_check.
+    METHODS ok_result_with_table_as_value FOR TESTING RAISING cx_static_check.
     METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
     METHODS fail_if_saves_error_message FOR TESTING RAISING cx_static_check.
     METHODS fail_if_returns_error_message FOR TESTING RAISING cx_static_check.
