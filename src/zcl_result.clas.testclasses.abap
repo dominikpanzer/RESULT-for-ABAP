@@ -3,6 +3,8 @@ CLASS zcl_result DEFINITION LOCAL FRIENDS result_tests.
 CLASS result_tests DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
+  PUBLIC SECTION.
+
 
   PRIVATE SECTION.
     DATA error_message TYPE string VALUE 'A wild error occurred!'.
@@ -34,6 +36,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_if_saves_error_message FOR TESTING RAISING cx_static_check.
     METHODS ok_if_is_failure_throws_error FOR TESTING RAISING cx_static_check.
     METHODS ok_if_returns_initial_value FOR TESTING RAISING cx_static_check.
+    METHODS metadata_string_can_be_stored FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -311,6 +314,13 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = 3 act = number_of_entries ).
   ENDMETHOD.
 
+  METHOD metadata_string_can_be_stored.
+    DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
+
+    DATA(number_of_entries) = lines( result->metadata ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = 1 act = number_of_entries ).
+  ENDMETHOD.
+
   METHOD this_returns_true.
     result = abap_true.
   ENDMETHOD.
@@ -318,6 +328,9 @@ CLASS result_tests IMPLEMENTATION.
   METHOD this_returns_false.
     result = abap_false.
   ENDMETHOD.
+
+
+
 
 
 ENDCLASS.
