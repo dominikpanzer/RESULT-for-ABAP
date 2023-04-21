@@ -62,6 +62,20 @@ results = VALUE #( ( result_two ) ( result_three ) ).
 DATA(final_result) = result_one->combine_with_multiple( results ).
 ```
 
+### Adding Metadata to a RESULT
+If you need more then just the one VALUE of an OK-RESULT, you can add metadata to the result. Metadata are key-value-pairs, with a unique CHAR30 key and the value being a data reference. Metadata can be added to any type of RESULT.
+```
+* Adding Metadata
+ DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
+ DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
+ result->with_metdata( key = 'band' value = 'Slayer' ).
+
+* Reading metadata with a key
+DATA(value) =  result->get_metadata( 'a structure' ).
+* Reading the whole key-value-table
+DATA(metadata) = result->get_all_metadata( ).
+```
+
 ### Usage of a RESULT in a method
 Use the RESULT as a RETURNING parameter:
 ```
@@ -95,6 +109,9 @@ new_partner = result.get_value( )->*.
 * do something with partner, i.e. persistence
 ```
 
+## How to install RESULT for ABAP
+You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
+
 ## Test List
 I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It's my personal todo-list. Often the list is very domain-centric, this one is quite technical.
 
@@ -109,6 +126,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return an exception, when the RESULT is OK
 :white_check_mark: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_VALUE` a initial value when the RESULT is OK
 :white_check_mark: when a OK-RESULT uses a table as a VALUE, the VALUE can be retrieved and has the same number of lines as the original internal table
+:white_check_mark: update the docs :japanese_ogre:
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` gets called once, the Metadata gets stored
 :white_check_mark: when the method `GET_ALL_METADATA( )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a table with one entry `(name, David Hasselhoff)`
 :white_check_mark: when the method `GET_METADATA( name )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a single value "David Hasselhoff"
@@ -118,16 +136,15 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `WITH_METADATA` is called with an initial key then thats okay
 :white_check_mark: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = value )` and value a structure, a structure will be returned by get_metadata( name ).
-:black_square_button: update the docs :japanese_ogre:
+:white_check_mark: update the docs :japanese_ogre:
 :black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
 :black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
 :black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
 :black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES` works fine
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can bei retrieved with `GET_ERROR_MESSAGES`
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK-RESULT it throws :interrobang: or should it just ignore the error message?
+:black_square_button: update the docs :japanese_ogre:
 
-## How to install RESULT for ABAP
-You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
 
 ## How to support this project
 
