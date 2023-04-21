@@ -26,6 +26,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_if_true FOR TESTING RAISING cx_static_check.
     METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
     METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
+    METHODS ok_Result_with_table_as_value FOR TESTING RAISING cx_static_check.
     METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
     METHODS fail_if_saves_error_message FOR TESTING RAISING cx_static_check.
     METHODS fail_if_returns_error_message FOR TESTING RAISING cx_static_check.
@@ -293,6 +294,23 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_initial( value ).
   ENDMETHOD.
 
+  METHOD ok_result_with_table_as_value.
+* arrange
+    DATA value TYPE TABLE OF char10.
+    DATA a_random_table TYPE TABLE OF char10.
+
+    a_random_table = VALUE #( ( 'one' ) ( 'two' ) ( 'three' ) ).
+
+* Act
+    DATA(result) = zcl_result=>ok( a_random_table ).
+    DATA(temporary_value) = result->get_value( ).
+    value = temporary_value->*.
+
+* assert
+    DATA(number_of_entries) = lines( value ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = 3 act = number_of_entries ).
+  ENDMETHOD.
+
   METHOD this_returns_true.
     result = abap_true.
   ENDMETHOD.
@@ -300,5 +318,6 @@ CLASS result_tests IMPLEMENTATION.
   METHOD this_returns_false.
     result = abap_false.
   ENDMETHOD.
+
 
 ENDCLASS.
