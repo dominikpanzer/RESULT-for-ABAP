@@ -115,7 +115,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `GET_ALL_METADATA( )` gets called without `WITH_METDATA` being called before, it returns an initial table
 :white_check_mark: when the method `GET_METADATA( date )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns an initial value
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` is called with the same key twice, no duplicates get stored and it throws
-:black_square_button: when the method `WITH_METADATA` is called with an initial key then thats okay
+:white_check_mark: when the method `WITH_METADATA` is called with an initial key then thats okay
 :black_square_button: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
 :black_square_button: when the method `WITH_METADATA( key = "name" value = value )` and value is not convertible into a string (struc, table, object) it throws
 :black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
