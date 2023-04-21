@@ -172,8 +172,9 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD with_metadata.
-    metadata = VALUE #( BASE metadata ( key = key value = REF #( value ) ) ).
     result = me.
+    CHECK NOT line_Exists( metadata[ key = key ] ).
+    metadata = VALUE #( BASE metadata ( key = key value = REF #( value ) ) ).
   ENDMETHOD.
 
   METHOD get_all_metadata.
@@ -182,9 +183,7 @@ CLASS zcl_result IMPLEMENTATION.
 
 
   METHOD get_metadata.
-
     value = VALUE #( metadata[ key = key ]-value OPTIONAL ).
-
   ENDMETHOD.
 
 ENDCLASS.

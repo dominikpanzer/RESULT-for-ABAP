@@ -41,6 +41,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS one_metadata_entry_can_be_read FOR TESTING RAISING cx_static_check.
     METHODS initial_metadata_table FOR TESTING RAISING cx_static_check.
     METHODS metadata_key_not_found FOR TESTING RAISING cx_static_check.
+    METHODS no_duplicate_metadata_allowed FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -353,6 +354,15 @@ CLASS result_tests IMPLEMENTATION.
     DATA(value) = result->get_metadata( key = 'date' ).
 
     cl_abap_unit_assert=>assert_initial( value ).
+  ENDMETHOD.
+
+  METHOD no_duplicate_metadata_allowed.
+    DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
+    result->with_metadata( key = 'name' value = 'David Hasselhoff' ).
+    DATA(metadata) = result->get_all_metadata( ).
+
+    DATA(number_of_entries) = lines( metadata ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metdata has too many lines' exp = 1 act = number_of_entries ).
   ENDMETHOD.
 
   METHOD this_returns_true.
