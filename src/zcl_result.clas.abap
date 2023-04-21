@@ -183,7 +183,7 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD get_metadata.
 
-    value = metadata[ key = key ]-value.
+    value = VALUE #( metadata[ key = key ]-value OPTIONAL ).
 
   ENDMETHOD.
 
