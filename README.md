@@ -66,9 +66,9 @@ DATA(final_result) = result_one->combine_with_multiple( results ).
 If you need more then just the one VALUE of an OK-RESULT, you can add metadata to the result. Metadata are key-value-pairs, with a unique CHAR30 key and the value being a data reference. Metadata can be added to any type of RESULT.
 ```
 * Adding Metadata
- DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
- DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
- result->with_metdata( key = 'band' value = 'Slayer' ).
+DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
+DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
+result->with_metdata( key = 'band' value = 'Slayer' ).
 
 * Reading metadata with a key
 DATA(value) =  result->get_metadata( 'a structure' ).
@@ -140,7 +140,10 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
 :black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
 :black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
-:black_square_button: `GET_ERROR_MESSAGE` is obsolete when `GET_ERROR_MESSAGES` works fine
+:black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple erorr_messages for a FAILURE
+:black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
+:black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` throws when OK-RESULT
+:black_Square_button: when `GET_ERROR_MESSAGE` gets called on a FAILURE it returns only the first error message
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can bei retrieved with `GET_ERROR_MESSAGES`
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK-RESULT it throws :interrobang: or should it just ignore the error message?
 :black_square_button: update the docs :japanese_ogre:
