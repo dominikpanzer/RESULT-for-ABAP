@@ -385,7 +385,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_can_handle_structures.
-    DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #(  'random structure' ) ).
+    DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
     DATA(value) = result->get_metadata( 'a structure' ).
 
