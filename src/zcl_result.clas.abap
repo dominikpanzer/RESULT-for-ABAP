@@ -42,6 +42,11 @@ CLASS zcl_result DEFINITION
     METHODS get_all_metadata
       RETURNING
         VALUE(metadata) TYPE ztt_metadata.
+    METHODS get_metadata
+      IMPORTING
+        key          TYPE char30
+      RETURNING
+        VALUE(value) TYPE REF TO data.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_message TYPE string.
@@ -173,6 +178,13 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD get_all_metadata.
     metadata = me->metadata.
+  ENDMETHOD.
+
+
+  METHOD get_metadata.
+
+    value = metadata[ key = key ]-value.
+
   ENDMETHOD.
 
 ENDCLASS.
