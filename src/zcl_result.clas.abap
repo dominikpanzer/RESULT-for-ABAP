@@ -5,10 +5,6 @@ CLASS zcl_result DEFINITION
 
   PUBLIC SECTION.
     TYPES: ty_results TYPE TABLE OF REF TO zcl_result.
-    TYPES: BEGIN OF ty_metadata,
-             key   TYPE char30,
-             value TYPE REF TO data,
-           END OF ty_metadata.
 
     CLASS-METHODS ok IMPORTING value         TYPE any OPTIONAL
                      RETURNING VALUE(result) TYPE REF TO zcl_result.
@@ -43,13 +39,16 @@ CLASS zcl_result DEFINITION
                 key           TYPE char30
                 value         TYPE any
       RETURNING VALUE(result) TYPE REF TO zcl_result.
+    METHODS get_all_metadata
+      RETURNING
+        VALUE(metadata) TYPE ztt_metadata.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_message TYPE string.
     DATA value TYPE REF TO data.
     DATA result_is_ok TYPE abap_boolean.
     DATA result_is_failure TYPE abap_boolean.
-    DATA metadata TYPE TABLE OF ty_metadata.
+    DATA metadata TYPE ztt_metadata.
     METHODS: constructor IMPORTING is_ok         TYPE abap_boolean
                                    value         TYPE any
                                    error_message TYPE string.
@@ -167,10 +166,13 @@ CLASS zcl_result IMPLEMENTATION.
     result = zcl_result=>fail_if( this_is_true = xsdbool( this_is_true <> abap_true ) error_message = error_message ).
   ENDMETHOD.
 
-
   METHOD with_metadata.
     metadata = VALUE #( BASE metadata ( key = key value = REF #( value ) ) ).
     result = me.
+  ENDMETHOD.
+
+  METHOD get_all_metadata.
+    metadata = me->metadata.
   ENDMETHOD.
 
 ENDCLASS.
