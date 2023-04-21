@@ -39,6 +39,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS metadata_string_can_be_stored FOR TESTING RAISING cx_static_check.
     METHODS all_metadata_can_be_read FOR TESTING RAISING cx_static_check.
     METHODS one_metadata_entry_can_be_read FOR TESTING RAISING cx_static_check.
+    METHODS initial_metadata_table FOR TESTING RAISING cx_static_check.
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -336,6 +337,14 @@ CLASS result_tests IMPLEMENTATION.
     DATA(value) = result->get_metadata( key = 'name' ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
+  ENDMETHOD.
+
+  METHOD initial_metadata_table.
+    DATA(result) = zcl_result=>ok( ).
+    DATA(metadata) = result->get_all_metadata( ).
+
+    DATA(number_of_entries) = lines( metadata ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metdata could not be received' exp = 0 act = number_of_entries ).
   ENDMETHOD.
 
   METHOD this_returns_true.
