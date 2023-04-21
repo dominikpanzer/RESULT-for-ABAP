@@ -111,7 +111,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when a OK-RESULT uses a table as a VALUE, the VALUE can be retrieved and has the same number of lines as the original internal table
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` gets called once, the Metadata gets stored
 :white_check_mark: when the method `GET_ALL_METADATA( )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a table with one entry `(name, David Hasselhoff)`
-:black_square_button: when the method `GET_METADATA( name )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a single entry (name, David Hasselhoff)
+:white_check_mark: when the method `GET_METADATA( name )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns a single value "David Hasselhoff"
 :black_square_button: when the method `GET_ALL_METADATA( )` gets called without `WITH_METDATA` being called before, it returns an initial table
 :black_square_button: when the method `GET_METADATA( date )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns an initial value
 :black_square_button: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` is called with the same key twice, no duplicates get stored and it throws
