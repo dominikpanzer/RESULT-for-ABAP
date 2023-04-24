@@ -1,5 +1,6 @@
 [![Run abaplint](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/lint.yml/badge.svg)](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/lint.yml)
 [![Run Unit Tests](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/unittests.yml/badge.svg)](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/unittests.yml)
+[![Twitter](https://img.shields.io/twitter/follow/PanzerDominik?style=social)](https://twitter.com/PanzerDominik)
 
 # RESULT for ABAP
 
