@@ -13,6 +13,7 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 * Other methods export two values: the actual value and an optional error message. But now you can only use EXPORTING and not RETURNING, because there are two parameters. This leads to hard to read code. Ideally a method should only return one value.
 * You could use a structure (value, error_message) to solve that problem. RESULT for ABAP is a comfortable object oriented way of doing this - a standardized solution. 🦖
 * RESULT enables a fluent coding style compared to try...catch...endtry all over the place.
+* Consistently using RESULT as the name for the returning parameter of methods simplifies method definitions and significantly improves readability of your code
 
 ## Okay, show me an example
 ### Creating successful RESULTs
