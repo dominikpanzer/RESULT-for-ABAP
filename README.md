@@ -1,3 +1,6 @@
+[![Run abaplint](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/lint.yml/badge.svg)](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/lint.yml)
+[![Run Unit Tests](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/unittests.yml/badge.svg)](https://github.com/dominikpanzer/RESULT-for-ABAP/actions/workflows/unittests.yml)
+
 # RESULT for ABAP
 
 Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful (OK) or it can fail (FAILURE) and the caller needs to know.  The Result-Pattern indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
