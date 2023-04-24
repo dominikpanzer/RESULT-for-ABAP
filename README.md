@@ -99,13 +99,13 @@ DATA new_partner TYPE bu_partner.
 DATA(result) = do_something( partner ).
 
 * guarding
-IF result.is_failure( ).
-DATA(error_message) = result.get_error_message( ).
+IF result->is_failure( ).
+DATA(error_message) = result->get_error_message( ).
 * log / error for webservice
 EXIT.
 ENDIF.
 
-new_partner = result.get_value( )->*.
+new_partner = result->get_value( )->*.
 * do something with partner, i.e. persistence
 ```
 
