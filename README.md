@@ -16,7 +16,7 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 
 ## Okay, show me an example
 ### Creating successful RESULTs
-```
+```abap
 * create a RESULT which represents a success (OK)
 DATA(result) = zcl_result=>ok( ).
 * another one with additional information, i.e. the key of an object you created or the object itself
@@ -31,7 +31,7 @@ DATA(result) = zcl_result=>ok_if( validator_returns_true( ) ).
 DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error_message = 'a wild error occurred' ).
 ```
 ### Creating failures
-```
+```abap
 * create a RESULT which indicates a FAILURE
 DATA(result) = zcl_result=>fail( ).
 * with an error message
@@ -47,7 +47,7 @@ DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_false( ) erro
 ```
 ### Combining results
 Usually there are many validations at the start of a method, so you might like to combine their single RESULTs into a final big one. The typical use case here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you method if you need the details.
-```
+```abap
 * combined RESULT is OK
 DATA(result_one) = zcl_result=>ok( ).
 DATA(result_two) = zcl_result=>ok( ).
@@ -64,7 +64,7 @@ DATA(final_result) = result_one->combine_with_multiple( results ).
 
 ### Adding Metadata to a RESULT
 If you need more then just the one VALUE of an OK-RESULT, you can add metadata to the result. Metadata are key-value-pairs, with a unique CHAR30 key and the value being a data reference. Metadata can be added to any type of RESULT.
-```
+```abap
 * Adding Metadata
 DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
 DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
@@ -78,7 +78,7 @@ DATA(metadata) = result->get_all_metadata( ).
 
 ### Usage of a RESULT in a method
 Use the RESULT as a RETURNING parameter:
-```
+```abap
 METHOD do_something IMPORTING partner TYPE bu_partner
                     RETURNING VALUE(result) TYPE REF TO zcl_result.
                     
@@ -93,7 +93,7 @@ ENDMETHOD.
 ```
 ### Processing a RESULT
 Use the RESULT-object for flow control as you like:
-```
+```abap
 * call a method which returns a result
 DATA new_partner TYPE bu_partner.
 DATA(result) = do_something( partner ).
