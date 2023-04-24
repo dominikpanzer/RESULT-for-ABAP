@@ -4,8 +4,8 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 
 ## Why should I use RESULT for ABAP instead of exceptions?
 * Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc.
-* Exception are often being used as a fancy form of the GOTO-statement. You often don't know where they will be catched. If they get catched at all.
-* Exceptions lead to hard to read code for example when many different exceptions have to be catched.
+* Exception are often being used as a fancy form of the GOTO-statement. You often don't know where they will be caught. If they get caught at all.
+* Exceptions lead to hard to read code for example when many different exceptions have to be caught.
 * Exceptions sometimes are not really helpful, because people tend to wrap all code into a TRY...CATCH-block for CX_ROOT.
 * Exceptions tend to return only one error, but what if you have multiple errors?
 * Often command-methods just return a value like "it worked," which is either ABAP_TRUE or ABAP_FALSE. But no additional error values are available which could be shown in the frontend.
@@ -24,29 +24,29 @@ DATA(result) = zcl_result=>ok( 100040340 ).
 * when a validator returns false
 DATA(result) = zcl_result=>fail_if( validator_returns_false( ) ).
 * when a validator returns false + error message
-DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_false( ) error_message = 'a wild errror occurred' ).
+DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_false( ) error_message = 'a wild error occurred' ).
 * when a validator returns true
 DATA(result) = zcl_result=>ok_if( validator_returns_true( ) ).
 * when a validator returns true
-DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error_message = 'a wild errror occurred' ).
+DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error_message = 'a wild error occurred' ).
 ```
 ### Creating failures
 ```abap
 * create a RESULT which indicates a FAILURE
 DATA(result) = zcl_result=>fail( ).
 * with an error message
-DATA(result) = zcl_result=>fail('a wild errror occurred').
+DATA(result) = zcl_result=>fail('a wild error occurred').
 * when a validator returns true
 DATA(result) = zcl_result=>fail_if( validator_returns_true( ) ).
 * when a validator returns true + error message
-DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_true( ) error_message = 'a wild errror occurred' ).
+DATA(result) = zcl_result=>fail_if( this_is_true = validator_returns_true( ) error_message = 'a wild error occurred' ).
 * when a validator returns false
 DATA(result) = zcl_result=>ok_if( validator_returns_false( ) ).
 * when a validator returns false
-DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild errror occurred' ).
+DATA(result) = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild error occurred' ).
 ```
 ### Combining results
-Usually there are many validations at the start of a usecase-method, so you might like to combine their single RESULTs into a final big one. The usual usecase here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you usecase-method if you need the details.
+Usually there are many validations at the start of a method, so you might like to combine their single RESULTs into a final big one. The typical use case here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you method if you need the details.
 ```abap
 * combined RESULT is OK
 DATA(result_one) = zcl_result=>ok( ).
@@ -110,7 +110,7 @@ new_partner = result.get_value( )->*.
 ```
 
 ## How to install RESULT for ABAP
-You can copy and paste the sourcecode into your system or simply clone this repository with [ABAPGit](https://abapgit.org/). 
+You can copy and paste the source code into your system or simply clone this repository with [abapGit](https://abapgit.org/). 
 
 ## Test List
 I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It's my personal todo-list. Often the list is very domain-centric, this one is quite technical.
@@ -137,25 +137,25 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = value )` and value a structure, a structure will be returned by get_metadata( name ).
 :white_check_mark: update the docs :japanese_ogre:
-:black_square_button: when `COMBINE_WITH_ONE` gets called with two failues, both error messages get stored
+:black_square_button: when `COMBINE_WITH_ONE` gets called with two failures, both error messages get stored
 :black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
 :black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple erorr_messages for a FAILURE
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` throws when OK-RESULT
 :black_Square_button: when `GET_ERROR_MESSAGE` gets called on a FAILURE it returns only the first error message
-:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can bei retrieved with `GET_ERROR_MESSAGES`
+:black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can be retrieved with `GET_ERROR_MESSAGES`
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK-RESULT it throws :interrobang: or should it just ignore the error message?
 :black_square_button: update the docs :japanese_ogre:
 
 
 ## How to support this project
 
-PRs are welcome! You can also just pick one of the testlist entries from above and implement the solution or implement your own idea. Fix a bug. Improve the docs... whatever suits you.
+PRs are welcome! You can also just pick one of the test list entries from above and implement the solution or implement your own idea. Fix a bug. Improve the docs... whatever suits you.
 
 Greetings, 
 Dominik
 
-follow me on [Twittter](https://twitter.com/PanzerDominik) or [Mastodon](https://sw-development-is.social/web/@PanzerDominik)
+follow me on [Twitter](https://twitter.com/PanzerDominik) or [Mastodon](https://sw-development-is.social/web/@PanzerDominik)
 
 
