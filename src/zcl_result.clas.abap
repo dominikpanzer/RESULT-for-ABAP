@@ -47,6 +47,9 @@ CLASS zcl_result DEFINITION
         key          TYPE char30
       RETURNING
         VALUE(value) TYPE REF TO data.
+    METHODS get_error_messages
+      RETURNING
+        VALUE(error_messages) TYPE ztt_error_messages.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
@@ -189,6 +192,11 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD get_metadata.
     value = VALUE #( metadata[ key = key ]-value OPTIONAL ).
+  ENDMETHOD.
+
+
+  METHOD get_error_messages.
+    error_messages = me->error_messages.
   ENDMETHOD.
 
 ENDCLASS.

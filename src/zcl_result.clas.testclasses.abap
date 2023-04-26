@@ -47,6 +47,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS metadata_can_handle_structures FOR TESTING RAISING cx_static_check.
     METHODS failures_two_errormsgs_stored FOR TESTING RAISING cx_static_check.
     METHODS combine_8_ok_and_failues FOR TESTING RAISING cx_static_check.
+    METHODS retrieve_2_error_messages FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -433,6 +434,20 @@ CLASS result_tests IMPLEMENTATION.
     DATA(number_of_messages) = lines( final_result->error_messages ).
     cl_abap_unit_assert=>assert_equals( msg = 'Doesnt have 4 error messages' exp = 4  act = number_of_messages ).
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
+  ENDMETHOD.
+
+  METHOD retrieve_2_error_messages.
+* arrange
+    DATA(result_one) = zcl_result=>fail( error_message ).
+    DATA(result_two) = zcl_result=>fail( error_message ).
+    DATA(final_result) = result_one->combine_with_one( result_two ).
+
+* act
+    DATA(error_messages) = final_result->get_error_messages( ).
+
+* assert
+    DATA(number_of_messages) = lines( error_messages ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Doesnt have 2 error messages' exp = 2  act = number_of_messages ).
   ENDMETHOD.
 
   METHOD this_returns_true.
