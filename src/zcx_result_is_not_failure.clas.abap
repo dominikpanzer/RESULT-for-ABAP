@@ -1,4 +1,4 @@
-CLASS zcx_result_is_no_failure DEFINITION
+CLASS zcx_result_is_not_failure DEFINITION
   PUBLIC
   INHERITING FROM cx_static_check
   FINAL
@@ -19,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS zcx_result_is_no_failure IMPLEMENTATION.
+CLASS zcx_result_is_not_failure IMPLEMENTATION.
 
 
   METHOD constructor ##ADT_SUPPRESS_GENERATION.

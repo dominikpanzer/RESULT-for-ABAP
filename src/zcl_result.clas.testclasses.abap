@@ -45,6 +45,8 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS metadata_with_empty_key FOR TESTING RAISING cx_static_check.
     METHODS more_than_one_metadata_entry FOR TESTING RAISING cx_static_check.
     METHODS metadata_can_handle_structures FOR TESTING RAISING cx_static_check.
+    METHODS failures_two_errormsgs_stored FOR TESTING RAISING cx_static_check.
+
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
 
@@ -120,8 +122,10 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>ok( ).
     DATA(result_three) = zcl_result=>ok( ).
+    DATA(result_four) = zcl_result=>ok( ).
     APPEND result_two TO results.
     APPEND result_three TO results.
+    APPEND result_four TO results.
 
     DATA(final_result) = result_one->combine_with_multiple( results ).
 
@@ -153,7 +157,7 @@ CLASS result_tests IMPLEMENTATION.
         DATA(result) = zcl_result=>ok( ).
         result->get_error_message( ).
         cl_abap_unit_assert=>fail( ).
-      CATCH zcx_result_is_no_failure INTO DATA(result_is_no_failure).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
     ENDTRY.
   ENDMETHOD.
@@ -260,7 +264,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD fail_if_saves_error_message.
     DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_true( ) error_message = error_message ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'didnt store error_message' exp = error_message act = result->error_message ).
+    cl_abap_unit_assert=>assert_equals( msg = 'didnt store error_message' exp = error_message act = result->get_error_message( ) ).
   ENDMETHOD.
 
   METHOD fail_if_returns_error_message.
@@ -274,7 +278,7 @@ CLASS result_tests IMPLEMENTATION.
         DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_false( ) error_message = error_message ).
         result->get_error_message( ).
         cl_abap_unit_assert=>fail( ).
-      CATCH zcx_result_is_no_failure INTO DATA(result_is_no_failure).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
     ENDTRY.
   ENDMETHOD.
@@ -290,7 +294,7 @@ CLASS result_tests IMPLEMENTATION.
         DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) error_message = error_message ).
         result->get_error_message( ).
         cl_abap_unit_assert=>fail( ).
-      CATCH zcx_result_is_no_failure INTO DATA(result_is_no_failure).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
     ENDTRY.
   ENDMETHOD.
@@ -381,15 +385,30 @@ CLASS result_tests IMPLEMENTATION.
     DATA(metadata) = result->get_all_metadata( ).
 
     DATA(number_of_entries) = lines( metadata ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Should be 2 entries' exp = 2 act = number_of_entries ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Should have 2 entries' exp = 2 act = number_of_entries ).
   ENDMETHOD.
 
   METHOD metadata_can_handle_structures.
     DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
-    DATA(value) = result->get_metadata( 'a structure' ).
+    DATA(value) =  result->get_metadata( 'a structure' ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = structure act = value->* ).
+  ENDMETHOD.
+
+  METHOD failures_two_errormsgs_stored.
+    DATA results TYPE zcl_result=>ty_results.
+
+* arrange
+    DATA(result_one) = zcl_result=>fail( error_message ).
+    DATA(result_two) = zcl_result=>fail( error_message ).
+
+* act
+    DATA(final_result) = result_one->combine_with_one( result_two ).
+
+* assert
+    DATA(number_of_messages) = lines( final_result->error_messages ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Doesn´t have 2 error messages' exp = 2  act = number_of_messages ).
   ENDMETHOD.
 
   METHOD this_returns_true.

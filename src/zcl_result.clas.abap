@@ -29,7 +29,7 @@ CLASS zcl_result DEFINITION
                                 zcx_result_is_not_ok.
     METHODS get_error_message RETURNING VALUE(error_message) TYPE string
                               RAISING
-                                        zcx_result_is_no_failure.
+                                        zcx_result_is_not_failure.
     METHODS combine_with_one IMPORTING other_result           TYPE REF TO zcl_result
                              RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
     METHODS combine_with_multiple IMPORTING results                TYPE ty_results
@@ -49,7 +49,7 @@ CLASS zcl_result DEFINITION
         VALUE(value) TYPE REF TO data.
   PROTECTED SECTION.
   PRIVATE SECTION.
-    DATA error_message TYPE string.
+    DATA error_messages TYPE ztt_error_messages.
     DATA value TYPE REF TO data.
     DATA result_is_ok TYPE abap_boolean.
     DATA result_is_failure TYPE abap_boolean.
@@ -78,7 +78,8 @@ CLASS zcl_result IMPLEMENTATION.
     result_is_ok = is_ok.
     result_is_failure = xsdbool( is_ok <> abap_true ).
     me->value = REF #( value ).
-    me->error_message = error_message.
+    CHECK result_is_failure = abap_true.
+    APPEND error_message TO error_messages.
   ENDMETHOD.
 
 
@@ -91,17 +92,21 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD combine_with_one.
     IF both_results_are_okay( other_result ).
-      combined_result = NEW zcl_result( is_ok = abap_true
-                                        value = space
-                                        error_message = space ).
+      combined_result = zcl_result=>ok( ).
+      EXIT.
+    ENDIF.
+
+    IF is_failure( ) AND other_result->is_failure( ).
+      APPEND other_result->get_error_message( ) TO error_messages.
+      combined_result = me.
       EXIT.
     ENDIF.
 
     IF is_failure( ).
       combined_result = me.
-    ELSE.
-      combined_result = other_result.
+      EXIT.
     ENDIF.
+    combined_result = other_result.
   ENDMETHOD.
 
   METHOD both_results_are_okay.
@@ -116,7 +121,7 @@ CLASS zcl_result IMPLEMENTATION.
       EXIT.
     ENDIF.
     LOOP AT results ASSIGNING FIELD-SYMBOL(<result>).
-      IF it_is_the_first_combination( ) = abap_true.
+      IF it_is_the_first_combination( ).
         combined_result = combine_with_one( <result> ).
       ELSE.
         combined_result = combined_result->combine_with_one( <result> ).
@@ -153,10 +158,10 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD get_error_message.
     IF is_ok( ).
-      RAISE EXCEPTION TYPE zcx_result_is_no_failure.
+      RAISE EXCEPTION TYPE zcx_result_is_not_failure.
     ENDIF.
-
-    error_message = me->error_message.
+    CHECK error_messages IS NOT INITIAL.
+    error_message = error_messages[ 1 ].
   ENDMETHOD.
 
   METHOD fail_if.
