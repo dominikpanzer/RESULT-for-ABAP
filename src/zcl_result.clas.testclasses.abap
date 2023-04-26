@@ -49,6 +49,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS combine_8_ok_and_failues FOR TESTING RAISING cx_static_check.
     METHODS retrieve_2_error_messages FOR TESTING RAISING cx_static_check.
     METHODS has_multiple_works_for_2 FOR TESTING RAISING cx_static_check.
+    METHODS has_multiple_works_for_1 FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -451,7 +452,7 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'Doesnt have 2 error messages' exp = 2  act = number_of_messages ).
   ENDMETHOD.
 
-    METHOD has_multiple_works_for_2.
+  METHOD has_multiple_works_for_2.
 * arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
@@ -461,6 +462,14 @@ CLASS result_tests IMPLEMENTATION.
     DATA(has_multiple_error_messages) = final_result->has_multiple_error_messages( ).
 
 * assert
+    cl_abap_unit_assert=>assert_equals( msg = 'Should return true' exp = abap_True  act = has_multiple_error_messages ).
+  ENDMETHOD.
+
+  METHOD has_multiple_works_for_1.
+    DATA(result) = zcl_result=>fail( error_message ).
+
+    DATA(has_multiple_error_messages) = result->has_multiple_error_messages( ).
+
     cl_abap_unit_assert=>assert_equals( msg = 'Should return true' exp = abap_True  act = has_multiple_error_messages ).
   ENDMETHOD.
 
