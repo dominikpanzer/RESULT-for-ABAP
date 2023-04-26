@@ -93,7 +93,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD create_failed_result_check_ok.
     DATA(result) = zcl_result=>fail( ).
 
-    DATA(is_result_ok) = result->is_OK( ).
+    DATA(is_result_ok) = result->is_ok( ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'ok, but it should be failed' exp = abap_false act = is_result_ok ).
   ENDMETHOD.
