@@ -53,6 +53,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS has_multiple_works_for_0 FOR TESTING RAISING cx_static_check.
     METHODS has_multiple_throws_for_ok FOR TESTING RAISING cx_static_check.
     METHODS get_error_msg_throws_for_ok FOR TESTING RAISING cx_static_check.
+    METHODS with_error_message_initial FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -502,6 +503,14 @@ CLASS result_tests IMPLEMENTATION.
       CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
     ENDTRY.
+  ENDMETHOD.
+
+  METHOD with_error_message_initial.
+* when parameter is empty it does nothing
+    DATA(result) = zcl_result=>fail( )->with_error_message( VALUE #( ) ).
+
+    DATA(error_message) = result->get_error_message(  ).
+    cl_abap_unit_assert=>assert_initial( error_message ).
   ENDMETHOD.
 
   METHOD this_returns_true.

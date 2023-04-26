@@ -54,6 +54,9 @@ CLASS zcl_result DEFINITION
     METHODS has_multiple_error_messages
       RETURNING VALUE(has_multiple_error_messages) TYPE abap_boolean
       RAISING   zcx_result_is_not_failure.
+    METHODS with_error_message
+      IMPORTING error_message TYPE string
+      RETURNING VALUE(result) TYPE REF TO zcl_result.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
@@ -212,6 +215,11 @@ CLASS zcl_result IMPLEMENTATION.
       RAISE EXCEPTION TYPE zcx_result_is_not_failure.
     ENDIF.
     has_multiple_error_messages = xsdbool( lines( error_messages ) > 0 ).
+  ENDMETHOD.
+
+
+  METHOD with_error_message.
+    result = me.
   ENDMETHOD.
 
 ENDCLASS.
