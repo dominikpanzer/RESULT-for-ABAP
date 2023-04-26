@@ -54,6 +54,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS has_multiple_throws_for_ok FOR TESTING RAISING cx_static_check.
     METHODS get_error_msg_throws_for_ok FOR TESTING RAISING cx_static_check.
     METHODS with_error_message_initial FOR TESTING RAISING cx_static_check.
+    METHODS with_error_message_on_failure FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -482,7 +483,7 @@ CLASS result_tests IMPLEMENTATION.
 
     DATA(has_multiple_error_messages) = result->has_multiple_error_messages( ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Should return true' exp = abap_true  act = has_multiple_error_messages ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Should return false' exp = abap_false  act = has_multiple_error_messages ).
   ENDMETHOD.
 
   METHOD has_multiple_throws_for_ok.
@@ -509,8 +510,15 @@ CLASS result_tests IMPLEMENTATION.
 * when parameter is empty it does nothing
     DATA(result) = zcl_result=>fail( )->with_error_message( VALUE #( ) ).
 
-    DATA(error_message) = result->get_error_message(  ).
+    DATA(error_message) = result->get_error_message( ).
     cl_abap_unit_assert=>assert_initial( error_message ).
+  ENDMETHOD.
+
+  METHOD with_error_message_on_failure.
+    DATA(result) = zcl_result=>fail( )->with_error_message( error_message ).
+
+    DATA(error_message) = result->get_error_message( ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error_message ).
   ENDMETHOD.
 
   METHOD this_returns_true.

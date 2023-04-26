@@ -89,6 +89,7 @@ CLASS zcl_result IMPLEMENTATION.
     result_is_failure = xsdbool( is_ok <> abap_true ).
     me->value = REF #( value ).
     CHECK result_is_failure = abap_true.
+    CHECK error_message IS NOT INITIAL.
     APPEND error_message TO error_messages.
   ENDMETHOD.
 
@@ -219,6 +220,9 @@ CLASS zcl_result IMPLEMENTATION.
 
 
   METHOD with_error_message.
+    IF error_message IS NOT INITIAL.
+      APPEND error_message TO error_messages.
+    ENDIF.
     result = me.
   ENDMETHOD.
 
