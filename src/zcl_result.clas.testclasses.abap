@@ -55,6 +55,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS get_error_msg_throws_for_ok FOR TESTING RAISING cx_static_check.
     METHODS with_error_message_initial FOR TESTING RAISING cx_static_check.
     METHODS with_error_message_on_failure FOR TESTING RAISING cx_static_check.
+    METHODS with_error_message_on_ok FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -519,6 +520,13 @@ CLASS result_tests IMPLEMENTATION.
 
     DATA(error) = result->get_error_message( ).
     cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error ).
+  ENDMETHOD.
+
+  METHOD with_error_message_on_ok.
+    DATA(result) = zcl_result=>ok( )->with_error_message( error_message ).
+
+    DATA(number_of_error_messages) = lines( result->error_messages ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Should be 0 for every OK-RESULT' exp = 0 act = number_of_error_messages ).
   ENDMETHOD.
 
   METHOD this_returns_true.

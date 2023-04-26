@@ -220,6 +220,11 @@ CLASS zcl_result IMPLEMENTATION.
 
 
   METHOD with_error_message.
+    IF is_ok( ).
+      result = me.
+      EXIT.
+    ENDIF.
+
     IF error_message IS NOT INITIAL.
       APPEND error_message TO error_messages.
     ENDIF.
