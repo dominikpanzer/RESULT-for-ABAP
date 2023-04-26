@@ -50,6 +50,9 @@ CLASS zcl_result DEFINITION
     METHODS get_error_messages
       RETURNING
         VALUE(error_messages) TYPE ztt_error_messages.
+    METHODS has_multiple_error_messages
+      RETURNING
+        VALUE(has_multiple_error_messages) TYPE abap_boolean.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
@@ -197,6 +200,11 @@ CLASS zcl_result IMPLEMENTATION.
 
   METHOD get_error_messages.
     error_messages = me->error_messages.
+  ENDMETHOD.
+
+
+  METHOD has_multiple_error_messages.
+    has_multiple_error_messages = xsdbool( lines( error_messages ) > 0 ).
   ENDMETHOD.
 
 ENDCLASS.
