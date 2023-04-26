@@ -517,8 +517,8 @@ CLASS result_tests IMPLEMENTATION.
   METHOD with_error_message_on_failure.
     DATA(result) = zcl_result=>fail( )->with_error_message( error_message ).
 
-    DATA(error_message) = result->get_error_message( ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error_message ).
+    DATA(error) = result->get_error_message( ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error ).
   ENDMETHOD.
 
   METHOD this_returns_true.
