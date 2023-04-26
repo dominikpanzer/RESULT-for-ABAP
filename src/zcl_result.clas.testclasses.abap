@@ -16,46 +16,47 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS failed_result_with_error FOR TESTING.
     METHODS combine_with_one_all_are_ok FOR TESTING.
     METHODS combine_multiple_all_are_ok FOR TESTING.
-    METHODS combine_with_one_and_one_faild FOR TESTING RAISING cx_static_check.
-    METHODS combine_with_one_and_all_faild FOR TESTING RAISING cx_static_check.
-    METHODS cant_access_error_when_ok FOR TESTING RAISING cx_static_check.
-    METHODS combine_multiple_all_failed FOR TESTING RAISING cx_static_check.
-    METHODS combine_multiple_one_failed FOR TESTING RAISING cx_static_check.
-    METHODS cant_access_value_when_failure FOR TESTING RAISING cx_static_check.
-    METHODS combine_multiple_no_entries FOR TESTING RAISING cx_static_check.
-    METHODS fail_if_true FOR TESTING RAISING cx_static_check.
-    METHODS not_failure_if_false FOR TESTING RAISING cx_static_check.
-    METHODS ok_if_true FOR TESTING RAISING cx_static_check.
-    METHODS not_ok_if_false FOR TESTING RAISING cx_static_check.
-    METHODS ok_result_with_object_as_value FOR TESTING RAISING cx_static_check.
-    METHODS ok_result_with_table_as_value FOR TESTING RAISING cx_static_check.
-    METHODS combine_multiple_two_failed FOR TESTING RAISING cx_static_check.
-    METHODS fail_if_saves_error_message FOR TESTING RAISING cx_static_check.
-    METHODS fail_if_returns_error_message FOR TESTING RAISING cx_static_check.
-    METHODS fail_if_is_ok_throws_value FOR TESTING RAISING cx_static_check.
-    METHODS ok_if_saves_error_message FOR TESTING RAISING cx_static_check.
-    METHODS ok_if_is_failure_throws_error FOR TESTING RAISING cx_static_check.
-    METHODS ok_if_returns_initial_value FOR TESTING RAISING cx_static_check.
-    METHODS metadata_string_can_be_stored FOR TESTING RAISING cx_static_check.
-    METHODS all_metadata_can_be_read FOR TESTING RAISING cx_static_check.
-    METHODS one_metadata_entry_can_be_read FOR TESTING RAISING cx_static_check.
-    METHODS initial_metadata_table FOR TESTING RAISING cx_static_check.
-    METHODS metadata_key_not_found FOR TESTING RAISING cx_static_check.
-    METHODS no_duplicate_metadata_allowed FOR TESTING RAISING cx_static_check.
-    METHODS metadata_with_empty_key FOR TESTING RAISING cx_static_check.
-    METHODS more_than_one_metadata_entry FOR TESTING RAISING cx_static_check.
-    METHODS metadata_can_handle_structures FOR TESTING RAISING cx_static_check.
-    METHODS failures_two_errormsgs_stored FOR TESTING RAISING cx_static_check.
-    METHODS combine_8_ok_and_failues FOR TESTING RAISING cx_static_check.
-    METHODS retrieve_2_error_messages FOR TESTING RAISING cx_static_check.
-    METHODS has_multiple_works_for_2 FOR TESTING RAISING cx_static_check.
-    METHODS has_multiple_works_for_1 FOR TESTING RAISING cx_static_check.
-    METHODS has_multiple_works_for_0 FOR TESTING RAISING cx_static_check.
-    METHODS has_multiple_throws_for_ok FOR TESTING RAISING cx_static_check.
-    METHODS get_error_msg_throws_for_ok FOR TESTING RAISING cx_static_check.
-    METHODS with_error_message_initial FOR TESTING RAISING cx_static_check.
-    METHODS with_error_message_on_failure FOR TESTING RAISING cx_static_check.
-    METHODS with_error_message_on_ok FOR TESTING RAISING cx_static_check.
+    METHODS combine_with_one_and_one_faild FOR TESTING.
+    METHODS combine_with_one_and_all_faild FOR TESTING.
+    METHODS cant_access_error_when_ok FOR TESTING.
+    METHODS combine_multiple_all_failed FOR TESTING.
+    METHODS combine_multiple_one_failed FOR TESTING.
+    METHODS cant_access_value_when_failure FOR TESTING.
+    METHODS combine_multiple_no_entries FOR TESTING.
+    METHODS fail_if_true FOR TESTING.
+    METHODS not_failure_if_false FOR TESTING.
+    METHODS ok_if_true FOR TESTING.
+    METHODS not_ok_if_false FOR TESTING.
+    METHODS ok_result_with_object_as_value FOR TESTING.
+    METHODS ok_result_with_table_as_value FOR TESTING.
+    METHODS combine_multiple_two_failed FOR TESTING.
+    METHODS fail_if_saves_error_message FOR TESTING.
+    METHODS fail_if_returns_error_message FOR TESTING.
+    METHODS fail_if_is_ok_throws_value FOR TESTING.
+    METHODS ok_if_saves_error_message FOR TESTING.
+    METHODS ok_if_is_failure_throws_error FOR TESTING.
+    METHODS ok_if_returns_initial_value FOR TESTING.
+    METHODS metadata_string_can_be_stored FOR TESTING.
+    METHODS all_metadata_can_be_read FOR TESTING.
+    METHODS one_metadata_entry_can_be_read FOR TESTING.
+    METHODS initial_metadata_table FOR TESTING.
+    METHODS metadata_key_not_found FOR TESTING.
+    METHODS no_duplicate_metadata_allowed FOR TESTING.
+    METHODS metadata_with_empty_key FOR TESTING.
+    METHODS more_than_one_metadata_entry FOR TESTING.
+    METHODS metadata_can_handle_structures FOR TESTING.
+    METHODS failures_two_errormsgs_stored FOR TESTING.
+    METHODS combine_8_ok_and_failues FOR TESTING.
+    METHODS retrieve_2_error_messages FOR TESTING.
+    METHODS has_multiple_works_for_2 FOR TESTING.
+    METHODS has_multiple_works_for_1 FOR TESTING.
+    METHODS has_multiple_works_for_0 FOR TESTING.
+    METHODS has_multiple_throws_for_ok FOR TESTING.
+    METHODS get_error_msg_throws_for_ok FOR TESTING.
+    METHODS with_error_message_initial FOR TESTING.
+    METHODS with_error_message_on_failure FOR TESTING.
+    METHODS with_error_message_on_ok FOR TESTING.
+    METHODS get_error_msgs_throws_for_ok FOR TESTING.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -68,25 +69,33 @@ CLASS result_tests IMPLEMENTATION.
   METHOD create_ok_result.
     DATA(result) = zcl_result=>ok( ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Not OK, but it should be ok' exp = abap_true act = result->is_ok( ) ).
+    DATA(is_result_ok) = result->is_ok( ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'Not OK, but it should be ok' exp = abap_true act = is_result_ok ).
   ENDMETHOD.
 
   METHOD create_ok_result_check_failed.
     DATA(result) = zcl_result=>ok( ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Failed, but it should be ok' exp = abap_false act = result->is_failure( ) ).
+    DATA(is_result_ok) = result->is_failure( ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'Failed, but it should be ok' exp = abap_false act = is_result_ok ).
   ENDMETHOD.
 
   METHOD create_failed_result.
     DATA(result) = zcl_result=>fail( ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Not failed, but it should be failed' exp = abap_true act = result->is_failure( ) ).
+    DATA(is_result_a_failure) = result->is_failure( ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'Not failed, but it should be failed' exp = abap_true act = is_result_a_failure ).
   ENDMETHOD.
 
   METHOD create_failed_result_check_ok.
     DATA(result) = zcl_result=>fail( ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'ok, but it should be failed' exp = abap_false act = result->is_ok( ) ).
+    DATA(is_result_ok) = result->is_OK( ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'ok, but it should be failed' exp = abap_false act = is_result_ok ).
   ENDMETHOD.
 
   METHOD ok_result_with_value.
@@ -501,6 +510,16 @@ CLASS result_tests IMPLEMENTATION.
     TRY.
         DATA(result) = zcl_result=>ok( ).
         result->get_error_message( ).
+        cl_abap_unit_assert=>fail( ).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
+        cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD get_error_msgs_throws_for_ok.
+    TRY.
+        DATA(result) = zcl_result=>ok( ).
+        result->get_error_messages( ).
         cl_abap_unit_assert=>fail( ).
       CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
         cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
