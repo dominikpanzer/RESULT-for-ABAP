@@ -28,8 +28,7 @@ CLASS zcl_result DEFINITION
                       RAISING
                                 zcx_result_is_not_ok.
     METHODS get_error_message RETURNING VALUE(error_message) TYPE string
-                              RAISING
-                                        zcx_result_is_not_failure.
+                              RAISING   zcx_result_is_not_failure.
     METHODS combine_with_one IMPORTING other_result           TYPE REF TO zcl_result
                              RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
     METHODS combine_with_multiple IMPORTING results                TYPE ty_results
@@ -49,10 +48,12 @@ CLASS zcl_result DEFINITION
         VALUE(value) TYPE REF TO data.
     METHODS get_error_messages
       RETURNING
-        VALUE(error_messages) TYPE ztt_error_messages.
+        VALUE(error_messages) TYPE ztt_error_messages
+      RAISING
+        zcx_result_is_not_failure.
     METHODS has_multiple_error_messages
-      RETURNING
-        VALUE(has_multiple_error_messages) TYPE abap_boolean.
+      RETURNING VALUE(has_multiple_error_messages) TYPE abap_boolean
+      RAISING   zcx_result_is_not_failure.
   PROTECTED SECTION.
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
@@ -199,11 +200,17 @@ CLASS zcl_result IMPLEMENTATION.
 
 
   METHOD get_error_messages.
+    IF is_ok( ).
+      RAISE EXCEPTION TYPE zcx_result_is_not_failure.
+    ENDIF.
     error_messages = me->error_messages.
   ENDMETHOD.
 
 
   METHOD has_multiple_error_messages.
+    IF is_ok( ).
+      RAISE EXCEPTION TYPE zcx_result_is_not_failure.
+    ENDIF.
     has_multiple_error_messages = xsdbool( lines( error_messages ) > 0 ).
   ENDMETHOD.
 

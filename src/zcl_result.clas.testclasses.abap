@@ -51,6 +51,8 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS has_multiple_works_for_2 FOR TESTING RAISING cx_static_check.
     METHODS has_multiple_works_for_1 FOR TESTING RAISING cx_static_check.
     METHODS has_multiple_works_for_0 FOR TESTING RAISING cx_static_check.
+    METHODS has_multiple_throws_for_ok FOR TESTING RAISING cx_static_check.
+    METHODS get_error_msg_throws_for_ok FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
@@ -480,6 +482,26 @@ CLASS result_tests IMPLEMENTATION.
     DATA(has_multiple_error_messages) = result->has_multiple_error_messages( ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Should return true' exp = abap_true  act = has_multiple_error_messages ).
+  ENDMETHOD.
+
+  METHOD has_multiple_throws_for_ok.
+    TRY.
+        DATA(result) = zcl_result=>ok( ).
+        result->has_multiple_error_messages( ).
+        cl_abap_unit_assert=>fail( ).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
+        cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD get_error_msg_throws_for_ok.
+    TRY.
+        DATA(result) = zcl_result=>ok( ).
+        result->get_error_message( ).
+        cl_abap_unit_assert=>fail( ).
+      CATCH zcx_result_is_not_failure INTO DATA(result_is_no_failure).
+        cl_abap_unit_assert=>assert_bound( result_is_no_failure ).
+    ENDTRY.
   ENDMETHOD.
 
   METHOD this_returns_true.
