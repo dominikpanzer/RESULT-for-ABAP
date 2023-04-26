@@ -147,7 +147,8 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns two error messages
 :white_check_mark: when `GET_ERROR_MESSAGE` gets called on a FAILURE it returns only the first error message
 :white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple erorr_messages for a FAILURE
-:black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
+:white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
+:black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is no error_message for a FAILURE
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` throws when OK-RESULT
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a FAILURE, the message will be added to the list of error messages and can be retrieved with `GET_ERROR_MESSAGES`
 :black_square_button: when `WITH_ERROR_MESSAGE( 'pi equals 3' )` gets called on a OK-RESULT it throws :interrobang: or should it just ignore the error message?
