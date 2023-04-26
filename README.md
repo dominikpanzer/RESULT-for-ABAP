@@ -61,7 +61,7 @@ result = result_one->combine_with_one( result_two ).
 * combined RESULT is a FAILURE
 DATA results TYPE zcl_result=>ty_results.
 DATA(result_one) = zcl_result=>ok( ).
-ATA(result_two) = zcl_result=>fail( error_message ).
+DATA(result_two) = zcl_result=>fail( error_message ).
 DATA(result_three) = zcl_result=>fail( error_message ).
 results = VALUE #( ( result_two ) ( result_three ) ).
 result = result_one->combine_with_multiple( results ).
