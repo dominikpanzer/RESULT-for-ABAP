@@ -391,14 +391,12 @@ CLASS result_tests IMPLEMENTATION.
   METHOD metadata_can_handle_structures.
     DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
-    DATA(value) =  result->get_metadata( 'a structure' ).
+    DATA(value) = result->get_metadata( 'a structure' ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = structure act = value->* ).
   ENDMETHOD.
 
   METHOD failures_two_errormsgs_stored.
-    DATA results TYPE zcl_result=>ty_results.
-
 * arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
@@ -408,7 +406,7 @@ CLASS result_tests IMPLEMENTATION.
 
 * assert
     DATA(number_of_messages) = lines( final_result->error_messages ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Doesn´t have 2 error messages' exp = 2  act = number_of_messages ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Doesnt have 2 error messages' exp = 2  act = number_of_messages ).
   ENDMETHOD.
 
   METHOD this_returns_true.
