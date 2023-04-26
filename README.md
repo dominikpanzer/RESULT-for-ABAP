@@ -143,8 +143,8 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = value )` and value a structure, a structure will be returned by get_metadata( name ).
 :white_check_mark: update the docs :japanese_ogre:
 :white_check_mark: when `COMBINE_WITH_ONE` gets called with two failures, both error messages get stored
-:black_square_button: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
-:black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns  two error messages
+:white_check_mark: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
+:black_square_button: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns two error messages
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple erorr_messages for a FAILURE
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
 :black_square_button: `HAS_MULTIPLE_ERROR_MESSAGES` throws when OK-RESULT
