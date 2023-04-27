@@ -133,7 +133,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>ok( ).
 
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Not OK, but it should be ok' exp = abap_true act = final_result->is_ok( ) ).
   ENDMETHOD.
@@ -147,7 +147,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_four) = zcl_result=>ok( ).
     results = VALUE #( ( result_two ) ( result_three ) ( result_four ) ).
 
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_these( results ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Not OK, but it should be ok' exp = abap_true act = final_result->is_ok( ) ).
   ENDMETHOD.
@@ -158,7 +158,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>fail( error_message ).
 
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK but it should be not OK' exp = abap_false act = final_result->is_ok( ) ).
     cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message( ) ).
@@ -168,7 +168,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
 
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'OK but it should be not OK' exp = abap_false act = final_result->is_ok( ) ).
     cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message( ) ).
@@ -206,7 +206,7 @@ CLASS result_tests IMPLEMENTATION.
     results = VALUE #( ( result_two ) ( result_three ) ).
 
 * act
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_these( results ).
 
 * assert
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
@@ -222,7 +222,7 @@ CLASS result_tests IMPLEMENTATION.
     results = VALUE #( ( result_two ) ( result_three ) ).
 
 * act
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_these( results ).
 
 * assert
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
@@ -234,7 +234,7 @@ CLASS result_tests IMPLEMENTATION.
 
     DATA(result_one) = zcl_result=>ok( ).
 
-    DATA(final_result) = result_one->combine_with_multiple( empty_table ).
+    DATA(final_result) = result_one->combine_with_these( empty_table ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'FAILURE, but should be ok' exp = abap_false act = final_result->is_failure( ) ).
   ENDMETHOD.
@@ -276,7 +276,7 @@ CLASS result_tests IMPLEMENTATION.
     results = VALUE #( ( result_two ) ( result_three ) ).
 
 * act
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_these( results ).
 
 * assert
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
@@ -421,7 +421,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_two) = zcl_result=>fail( error_message ).
 
 * act
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
 * assert
     DATA(number_of_messages) = lines( final_result->error_messages ).
@@ -445,7 +445,7 @@ CLASS result_tests IMPLEMENTATION.
                        ( result_six ) ( result_seven ) ( result_eight ) ).
 
 * act
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_these( results ).
 
 * assert
     DATA(number_of_messages) = lines( final_result->error_messages ).
@@ -457,7 +457,7 @@ CLASS result_tests IMPLEMENTATION.
 * arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
 * act
     DATA(error_messages) = final_result->get_error_messages( ).
@@ -471,7 +471,7 @@ CLASS result_tests IMPLEMENTATION.
 * arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
-    DATA(final_result) = result_one->combine_with_one( result_two ).
+    DATA(final_result) = result_one->combine_with( result_two ).
 
 * act
     DATA(has_multiple_error_messages) = final_result->has_multiple_error_messages( ).

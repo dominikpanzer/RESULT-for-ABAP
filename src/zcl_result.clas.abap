@@ -10,54 +10,39 @@ CLASS zcl_result DEFINITION
                      RETURNING VALUE(result) TYPE REF TO zcl_result.
     CLASS-METHODS fail IMPORTING error_message TYPE string OPTIONAL
                        RETURNING VALUE(result) TYPE REF TO zcl_result.
-
     CLASS-METHODS fail_if
       IMPORTING this_is_true  TYPE abap_bool
                 error_message TYPE string OPTIONAL
-      RETURNING
-                VALUE(result) TYPE REF TO zcl_result.
+      RETURNING VALUE(result) TYPE REF TO zcl_result.
     CLASS-METHODS ok_if
       IMPORTING this_is_true  TYPE abap_bool
                 error_message TYPE string OPTIONAL
-      RETURNING
-                VALUE(result) TYPE REF TO zcl_result.
-
+      RETURNING VALUE(result) TYPE REF TO zcl_result.
     METHODS is_failure RETURNING VALUE(is_failure) TYPE abap_bool.
     METHODS is_ok RETURNING VALUE(is_ok) TYPE abap_bool.
     METHODS get_value RETURNING VALUE(value) TYPE REF TO data
-                      RAISING
-                                zcx_result_is_not_ok.
+                      RAISING   zcx_result_is_not_ok.
     METHODS get_error_message RETURNING VALUE(error_message) TYPE string
                               RAISING   zcx_result_is_not_failure.
-    METHODS combine_with_one IMPORTING other_result           TYPE REF TO zcl_result
-                             RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
-    METHODS combine_with_multiple IMPORTING results                TYPE ty_results
-                                  RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
-    METHODS with_metadata
-      IMPORTING
-                key           TYPE char30
-                value         TYPE any
-      RETURNING VALUE(result) TYPE REF TO zcl_result.
-    METHODS get_all_metadata
-      RETURNING
-        VALUE(metadata) TYPE ztt_metadata.
-    METHODS get_metadata
-      IMPORTING
-        key          TYPE char30
-      RETURNING
-        VALUE(value) TYPE REF TO data.
-    METHODS get_error_messages
-      RETURNING
-        VALUE(error_messages) TYPE ztt_error_messages
-      RAISING
-        zcx_result_is_not_failure.
+    METHODS combine_with IMPORTING other_result           TYPE REF TO zcl_result
+                         RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
+    METHODS combine_with_these IMPORTING results                TYPE ty_results
+                               RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
+    METHODS with_metadata IMPORTING key           TYPE char30
+                                    value         TYPE any
+                          RETURNING VALUE(result) TYPE REF TO zcl_result.
+    METHODS get_all_metadata RETURNING VALUE(metadata) TYPE ztt_metadata.
+    METHODS get_metadata IMPORTING key          TYPE char30
+                         RETURNING VALUE(value) TYPE REF TO data.
+    METHODS get_error_messages RETURNING VALUE(error_messages) TYPE ztt_error_messages
+                               RAISING   zcx_result_is_not_failure.
     METHODS has_multiple_error_messages
       RETURNING VALUE(has_multiple_error_messages) TYPE abap_bool
       RAISING   zcx_result_is_not_failure.
     METHODS with_error_message
       IMPORTING error_message TYPE string
       RETURNING VALUE(result) TYPE REF TO zcl_result.
-  PROTECTED SECTION.
+
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
     DATA value TYPE REF TO data.
@@ -67,10 +52,10 @@ CLASS zcl_result DEFINITION
     METHODS: constructor IMPORTING is_ok         TYPE abap_bool
                                    value         TYPE any
                                    error_message TYPE string.
-    METHODS   both_results_are_okay IMPORTING result          TYPE REF TO zcl_result
-                                    RETURNING VALUE(r_result) TYPE abap_bool.
-    METHODS   there_is_nothing_to_combine IMPORTING results       TYPE ty_results
-                                          RETURNING VALUE(result) TYPE abap_bool.
+    METHODS both_results_are_okay IMPORTING result          TYPE REF TO zcl_result
+                                  RETURNING VALUE(r_result) TYPE abap_bool.
+    METHODS there_is_nothing_to_combine IMPORTING results       TYPE ty_results
+                                         RETURNING VALUE(result) TYPE abap_bool.
     METHODS it_is_the_first_combination  RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
@@ -101,7 +86,7 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD combine_with_one.
+  METHOD combine_with.
     IF both_results_are_okay( other_result ).
       combined_result = zcl_result=>ok( ).
       EXIT.
@@ -125,7 +110,7 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD combine_with_multiple.
+  METHOD combine_with_these.
 
     IF there_is_nothing_to_combine( results ).
       combined_result = me.
@@ -133,9 +118,9 @@ CLASS zcl_result IMPLEMENTATION.
     ENDIF.
     LOOP AT results ASSIGNING FIELD-SYMBOL(<result>).
       IF it_is_the_first_combination( ).
-        combined_result = combine_with_one( <result> ).
+        combined_result = combine_with( <result> ).
       ELSE.
-        combined_result = combined_result->combine_with_one( <result> ).
+        combined_result = combined_result->combine_with( <result> ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
