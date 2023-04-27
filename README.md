@@ -53,11 +53,13 @@ result = zcl_result=>ok_if( validator_returns_false( ) ).
 * when a validator returns false
 result = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild error occurred' ).
 * reading an error message / the first error or all errors or all error messages
-IF result->has_multiple_errors( ).
+IF result->has_multiple_error_messages( ).
  DATA(error_message) = result->get_error_message( ).
 ELSE.
  DATA(error_messages) = result->get_error_messages( ).
 ENDIF.
+* adding additional error messages to a FAILURE
+zcl_result=>fail('a wild error occurred')->with_error_message( error_message ).
 ```
 ### Combining results
 Usually there are many validations at the start of a method, so you might like to combine their single RESULTs into a final big one. The typical use case here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you method if you need the details.
