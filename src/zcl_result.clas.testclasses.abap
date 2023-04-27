@@ -58,8 +58,8 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS with_error_message_on_ok FOR TESTING.
     METHODS get_error_msgs_throws_for_ok FOR TESTING.
 
-    METHODS this_returns_true RETURNING VALUE(result) TYPE abap_boolean.
-    METHODS this_returns_false RETURNING VALUE(result) TYPE abap_boolean.
+    METHODS this_returns_true RETURNING VALUE(result) TYPE abap_bool.
+    METHODS this_returns_false RETURNING VALUE(result) TYPE abap_bool.
 
 ENDCLASS.
 

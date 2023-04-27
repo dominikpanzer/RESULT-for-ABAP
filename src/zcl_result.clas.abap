@@ -12,18 +12,18 @@ CLASS zcl_result DEFINITION
                        RETURNING VALUE(result) TYPE REF TO zcl_result.
 
     CLASS-METHODS fail_if
-      IMPORTING this_is_true  TYPE abap_boolean
+      IMPORTING this_is_true  TYPE abap_bool
                 error_message TYPE string OPTIONAL
       RETURNING
                 VALUE(result) TYPE REF TO zcl_result.
     CLASS-METHODS ok_if
-      IMPORTING this_is_true  TYPE abap_boolean
+      IMPORTING this_is_true  TYPE abap_bool
                 error_message TYPE string OPTIONAL
       RETURNING
                 VALUE(result) TYPE REF TO zcl_result.
 
-    METHODS is_failure RETURNING VALUE(is_failure) TYPE abap_boolean.
-    METHODS is_ok RETURNING VALUE(is_ok) TYPE abap_boolean.
+    METHODS is_failure RETURNING VALUE(is_failure) TYPE abap_bool.
+    METHODS is_ok RETURNING VALUE(is_ok) TYPE abap_bool.
     METHODS get_value RETURNING VALUE(value) TYPE REF TO data
                       RAISING
                                 zcx_result_is_not_ok.
@@ -52,7 +52,7 @@ CLASS zcl_result DEFINITION
       RAISING
         zcx_result_is_not_failure.
     METHODS has_multiple_error_messages
-      RETURNING VALUE(has_multiple_error_messages) TYPE abap_boolean
+      RETURNING VALUE(has_multiple_error_messages) TYPE abap_bool
       RAISING   zcx_result_is_not_failure.
     METHODS with_error_message
       IMPORTING error_message TYPE string
@@ -61,10 +61,10 @@ CLASS zcl_result DEFINITION
   PRIVATE SECTION.
     DATA error_messages TYPE ztt_error_messages.
     DATA value TYPE REF TO data.
-    DATA result_is_ok TYPE abap_boolean.
-    DATA result_is_failure TYPE abap_boolean.
+    DATA result_is_ok TYPE abap_bool.
+    DATA result_is_failure TYPE abap_bool.
     DATA metadata TYPE ztt_metadata.
-    METHODS: constructor IMPORTING is_ok         TYPE abap_boolean
+    METHODS: constructor IMPORTING is_ok         TYPE abap_bool
                                    value         TYPE any
                                    error_message TYPE string.
     METHODS   both_results_are_okay IMPORTING result          TYPE REF TO zcl_result
