@@ -7,16 +7,17 @@
 Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful (OK) or it can fail (FAILURE) and the caller needs to know.  The Result-Pattern indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
 
 ## Why should I use RESULT for ABAP instead of exceptions?
-* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc.
-* Exception are often being used as a fancy form of the GOTO-statement. You often don't know where they will be caught. If they get caught at all.
-* Exceptions lead to hard to read code for example when many different exceptions have to be caught.
-* Exceptions sometimes are not really helpful, because people tend to wrap all code into a TRY...CATCH-block for CX_ROOT.
+* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc. When you expect something (like the user entering wrong/invalid data) than it is actually no case for an exception. You actaully seem to expect that users quite often are creative when entering data.
+* Exception are often being used as a fancy form of the [GOTO-statement](https://en.wikipedia.org/wiki/Considered_harmful). You often don't know where they will be caught. If they get caught at all. This has been considered harmful in 1968.
+* If a method throw can throw an exception and the calling code does not directly catch it - was this a mistake or on purpose? Will it be catch somewhere up the callstack? You never know, so have fun analyzing the whole stack.
+* Exceptions lead to hard to read code, because regular business logic is mixed with technical error handling via TRY...CATCH-blocks, for example when many different exceptions have to be caught.
+* Exceptions sometimes are not really helpful, because people tend to wrap all code into a TRY...CATCH-block for CX_ROOT. This can lead to inconsistent data, because a part of the data might already have been processed and persisted. It would be actually better to shortdump.
 * Exceptions tend to return only one error, but what if you have multiple errors?
 * Often command-methods just return a value like "it worked," which is either ABAP_TRUE or ABAP_FALSE. But no additional error values are available which could be shown in the frontend.
-* Often query-methods just return the result of a query and when the result is empty, then this represents an error. But what was the reason for the error?
+* Often query-methods just return the result of a query and if the result is empty, then this represents an error. But what was the reason for the error?
 * Other methods export two values: the actual value and an optional error message. But now you can only use EXPORTING and not RETURNING, because there are two parameters. This leads to hard to read code. Ideally a method should only return one value.
 * You could use a structure (value, error_message) to solve that problem. RESULT for ABAP is a comfortable object oriented way of doing this - a standardized solution. Your method simply returns a RESULT. 🦖
-* RESULT enables a fluent coding style compared to try...catch...endtry all over the place.
+* RESULT enables a fluent coding style compared to TRY...CATCH...ENDTRY all over the place.
 * Consistently using RESULT as the name for the returning parameter of methods simplifies method definitions and significantly improves readability of your code
 
 ## Okay, show me an example
