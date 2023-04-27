@@ -16,8 +16,8 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS failed_result_with_error FOR TESTING.
     METHODS combine_with_one_all_are_ok FOR TESTING.
     METHODS combine_multiple_all_are_ok FOR TESTING.
-    METHODS combine_with_one_and_one_faild FOR TESTING.
-    METHODS combine_with_one_and_all_faild FOR TESTING.
+    METHODS combine_ok_and_failure FOR TESTING.
+    METHODS combine_two_failures FOR TESTING.
     METHODS cant_access_error_when_ok FOR TESTING.
     METHODS combine_multiple_all_failed FOR TESTING.
     METHODS combine_multiple_one_failed FOR TESTING.
@@ -30,13 +30,13 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS ok_result_with_object_as_value FOR TESTING.
     METHODS ok_result_with_table_as_value FOR TESTING.
     METHODS combine_multiple_two_failed FOR TESTING.
-    METHODS fail_if_saves_error_message FOR TESTING.
+
     METHODS fail_if_returns_error_message FOR TESTING.
     METHODS fail_if_is_ok_throws_value FOR TESTING.
     METHODS ok_if_saves_error_message FOR TESTING.
     METHODS ok_if_is_failure_throws_error FOR TESTING.
     METHODS ok_if_returns_initial_value FOR TESTING.
-    METHODS metadata_string_can_be_stored FOR TESTING.
+
     METHODS all_metadata_can_be_read FOR TESTING.
     METHODS one_metadata_entry_can_be_read FOR TESTING.
     METHODS initial_metadata_table FOR TESTING.
@@ -99,7 +99,8 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_result_with_value.
-    DATA(id_of_created_object) = '103535353'.
+* can save a value of a simple data type like char
+    DATA(id_of_created_object) = '0815'.
     DATA value LIKE id_of_created_object.
 
     DATA(result) = zcl_result=>ok( id_of_created_object ).
@@ -110,6 +111,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_result_with_object_as_value.
+* can save a value with a complex datat ype like object reference
     DATA(random_object_reference) = zcl_result=>ok( ).
     DATA value TYPE REF TO zcl_result.
 
@@ -127,6 +129,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_with_one_all_are_ok.
+* combining two RESULTs which are OK leads to a OK-RESULT
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>ok( ).
 
@@ -142,16 +145,16 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_two) = zcl_result=>ok( ).
     DATA(result_three) = zcl_result=>ok( ).
     DATA(result_four) = zcl_result=>ok( ).
-    APPEND result_two TO results.
-    APPEND result_three TO results.
-    APPEND result_four TO results.
+    results = VALUE #( ( result_two ) ( result_three ) ( result_four ) ).
 
     DATA(final_result) = result_one->combine_with_multiple( results ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Not OK, but it should be ok' exp = abap_true act = final_result->is_ok( ) ).
   ENDMETHOD.
 
-  METHOD combine_with_one_and_one_faild.
+  METHOD combine_ok_and_failure.
+* if two RESULTS get combined and one is a FAILURE, the final result should
+* also be a FAILURE
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>fail( error_message ).
 
@@ -161,7 +164,7 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'Errormessage not correct' exp = error_message act = final_result->get_error_message( ) ).
   ENDMETHOD.
 
-  METHOD combine_with_one_and_all_faild.
+  METHOD combine_two_failures.
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( error_message ).
 
@@ -182,6 +185,8 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD cant_access_value_when_failure.
+* FAILUREs don't have any value. needs to be checked with .is_ok( )
+* or it throws
     TRY.
         DATA(result) = zcl_result=>fail( error_message ).
         result->get_value( ).
@@ -198,9 +203,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>fail( error_message ).
     DATA(result_two) = zcl_result=>fail( 'no' ).
     DATA(result_three) = zcl_result=>fail( 'argh' ).
-
-    APPEND result_two TO results.
-    APPEND result_three TO results.
+    results = VALUE #( ( result_two ) ( result_three ) ).
 
 * act
     DATA(final_result) = result_one->combine_with_multiple( results ).
@@ -216,9 +219,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>fail( error_message ).
     DATA(result_three) = zcl_result=>ok( ).
-
-    APPEND result_two TO results.
-    APPEND result_three TO results.
+    results = VALUE #( ( result_two ) ( result_three ) ).
 
 * act
     DATA(final_result) = result_one->combine_with_multiple( results ).
@@ -228,13 +229,14 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_multiple_no_entries.
-    DATA results TYPE zcl_result=>ty_results.
+* the results-table is empty, shouldnt change from OK to Failure.
+    DATA empty_table TYPE zcl_result=>ty_results.
 
-    DATA(result_one) = zcl_result=>fail( error_message ).
+    DATA(result_one) = zcl_result=>ok( ).
 
-    DATA(final_result) = result_one->combine_with_multiple( results ).
+    DATA(final_result) = result_one->combine_with_multiple( empty_table ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
+    cl_abap_unit_assert=>assert_equals( msg = 'FAILURE, but should be ok' exp = abap_false act = final_result->is_failure( ) ).
   ENDMETHOD.
 
   METHOD fail_if_true.
@@ -280,12 +282,6 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'OK, but it should be not OK' exp = abap_true act = final_result->is_failure( ) ).
   ENDMETHOD.
 
-  METHOD fail_if_saves_error_message.
-    DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_true( ) error_message = error_message ).
-
-    cl_abap_unit_assert=>assert_equals( msg = 'didnt store error_message' exp = error_message act = result->get_error_message( ) ).
-  ENDMETHOD.
-
   METHOD fail_if_returns_error_message.
     DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_true( ) error_message = error_message ).
 
@@ -293,6 +289,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD fail_if_is_ok_throws_value.
+* OK RESULTs throw when an error message is requested
     TRY.
         DATA(result) = zcl_result=>fail_if( this_is_true = this_returns_false( ) error_message = error_message ).
         result->get_error_message( ).
@@ -309,6 +306,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_if_is_failure_throws_error.
+* OK RESULTs throw when an error message is requested
     TRY.
         DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) error_message = error_message ).
         result->get_error_message( ).
@@ -319,6 +317,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD ok_if_returns_initial_value.
+* OK_IF doesnt support any VALUE, so returns an empty one
     DATA value TYPE char1.
 
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) ).
@@ -345,13 +344,6 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = 3 act = number_of_entries ).
   ENDMETHOD.
 
-  METHOD metadata_string_can_be_stored.
-    DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
-
-    DATA(number_of_entries) = lines( result->metadata ).
-    cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = 1 act = number_of_entries ).
-  ENDMETHOD.
-
   METHOD all_metadata_can_be_read.
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
     DATA(metadata) = result->get_all_metadata( ).
@@ -376,6 +368,8 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_key_not_found.
+* if there is no metadata which has the provided key, the returned value is
+* empty
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
     DATA(value) = result->get_metadata( key = 'date' ).
 
@@ -383,6 +377,8 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD no_duplicate_metadata_allowed.
+* a metadata key is only allowed once. it has to be unique.
+* it just stores it once
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
     result->with_metadata( key = 'name' value = 'David Hasselhoff' ).
     DATA(metadata) = result->get_all_metadata( ).
@@ -392,7 +388,9 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_with_empty_key.
+* an empty key is a valid key
     DATA(result) = zcl_result=>ok( )->with_metadata( key = '' value = 'David Hasselhoff' ).
+
     DATA(value) = result->get_metadata( key = '' ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
@@ -401,6 +399,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD more_than_one_metadata_entry.
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
     result->with_metadata( key = 'best song' value = 'Looking for freedom' ).
+
     DATA(metadata) = result->get_all_metadata( ).
 
     DATA(number_of_entries) = lines( metadata ).
@@ -410,6 +409,7 @@ CLASS result_tests IMPLEMENTATION.
   METHOD metadata_can_handle_structures.
     DATA(structure) = VALUE zst_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
+
     DATA(value) = result->get_metadata( 'a structure' ).
 
     cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = structure act = value->* ).
@@ -531,6 +531,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result) = zcl_result=>fail( )->with_error_message( VALUE #( ) ).
 
     DATA(error_message) = result->get_error_message( ).
+
     cl_abap_unit_assert=>assert_initial( error_message ).
   ENDMETHOD.
 
@@ -538,6 +539,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result) = zcl_result=>fail( )->with_error_message( error_message ).
 
     DATA(error) = result->get_error_message( ).
+
     cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error ).
   ENDMETHOD.
 
@@ -545,6 +547,7 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result) = zcl_result=>ok( )->with_error_message( error_message ).
 
     DATA(number_of_error_messages) = lines( result->error_messages ).
+
     cl_abap_unit_assert=>assert_equals( msg = 'Should be 0 for every OK-RESULT' exp = 0 act = number_of_error_messages ).
   ENDMETHOD.
 
