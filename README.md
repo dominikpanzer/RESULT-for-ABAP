@@ -24,8 +24,11 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 ```abap
 * create a RESULT which represents a success (OK)
 result = zcl_result=>ok( ).
-* another one with additional information, i.e. the key of an object you created or the object itself
+* another one with additional information ("value", i.e. the key of an object you created or the object itself
 result = zcl_result=>ok( 100040340 ).
+* read the information again. You need to know the type of the value. that's the downside of a RESULT
+DATA new_partner TYPE bu_partner.
+new_partner = result->get_value( )->*.
 * when a validator returns false
 result = zcl_result=>fail_if( validator_returns_false( ) ).
 * when a validator returns false + error message
@@ -49,6 +52,12 @@ result = zcl_result=>fail_if( this_is_true = validator_returns_true( ) error_mes
 result = zcl_result=>ok_if( validator_returns_false( ) ).
 * when a validator returns false
 result = zcl_result=>ok_if( this_is_true = validator_returns_false( ) error_message = 'a wild error occurred' ).
+* reading an error message / the first error or all errors or all error messages
+IF result->has_multiple_errors( ).
+ DATA(error_message) = result->get_error_message( ).
+ELSE.
+ DATA(error_messages) = result->get_error_messages( ).
+ENDIF.
 ```
 ### Combining results
 Usually there are many validations at the start of a method, so you might like to combine their single RESULTs into a final big one. The typical use case here is "validate X variables and all have to be OK, otherwise it's a FAILURE so stop processing the data". So if there is at least one FAILURE, the RESULT will be a FAILURE. Otherwise the RESULT will be OK. Currently only one error message will be stored. Combined OK-RESULTs don't have a value. You can also return a table of RESULTs from you method if you need the details.
@@ -56,7 +65,7 @@ Usually there are many validations at the start of a method, so you might like t
 * combined RESULT is OK
 DATA(result_one) = zcl_result=>ok( ).
 DATA(result_two) = zcl_result=>ok( ).
-result = result_one->combine_with_one( result_two ).
+result = result_one->combine_with( result_two ).
 
 * combined RESULT is a FAILURE
 DATA results TYPE zcl_result=>ty_results.
@@ -64,7 +73,7 @@ DATA(result_one) = zcl_result=>ok( ).
 DATA(result_two) = zcl_result=>fail( error_message ).
 DATA(result_three) = zcl_result=>fail( error_message ).
 results = VALUE #( ( result_two ) ( result_three ) ).
-result = result_one->combine_with_multiple( results ).
+result = result_one->combine_with_these( results ).
 ```
 
 ### Adding Metadata to a RESULT
@@ -120,7 +129,7 @@ You can copy and paste the source code into your system or simply clone this rep
 ## Test List
 I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16-tdd-testlist/) before I start coding. It's my personal todo-list. Often the list is very domain-centric, this one is quite technical.
 
-|Test|
+|Test List|
 |----|
 :white_check_mark: first release somehow seems to works
 :white_check_mark: when `FAIL_IF` gets called with an optional error message "a wild error occured", the error message gets stored when the RESULT is a failure
@@ -142,8 +151,8 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = value )` and value a structure, a structure will be returned by get_metadata( name ).
 :white_check_mark: update the docs :japanese_ogre:
-:white_check_mark: when `COMBINE_WITH_ONE` gets called with two failures, both error messages get stored
-:white_check_mark: when `COMBINE_WITH_MULTIPLE` gets called with tow failures, both error messages get stored
+:white_check_mark: when `COMBINE_WITH` gets called with two failures, both error messages get stored
+:white_check_mark: when `COMBINE_WITH_THESE` gets called with tow failures, both error messages get stored
 :white_check_mark: when `GET_ERROR_MESSAGES` gets called for an FAILURE with two error messages, it returns two error messages
 :white_check_mark: when `GET_ERROR_MESSAGE` gets called on a FAILURE it returns only the first error message
 :white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is no error_message for a FAILURE
@@ -156,7 +165,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a OK-RESULT it doesnt do anything but return the result
 :black_square_button: update the docs :japanese_ogre:
 
-As you can see I'm commiting after every test. I also often use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
+As you can see I'm usually commiting after every green test or even more often. I tend to use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
 
 ## How to support this project
 
