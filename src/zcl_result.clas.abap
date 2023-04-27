@@ -5,6 +5,11 @@ CLASS zcl_result DEFINITION
 
   PUBLIC SECTION.
     TYPES: ty_results TYPE TABLE OF REF TO zcl_result.
+    TYPES: BEGIN OF ty_metadata_entry,
+             key   TYPE char30,
+             value TYPE REF TO data,
+           END OF ty_metadata_entry.
+    TYPES ty_metadata TYPE STANDARD TABLE OF  ty_metadata_entry WITH NON-UNIQUE KEY key.
 
     CLASS-METHODS ok IMPORTING value         TYPE any OPTIONAL
                      RETURNING VALUE(result) TYPE REF TO zcl_result.
@@ -31,7 +36,7 @@ CLASS zcl_result DEFINITION
     METHODS with_metadata IMPORTING key           TYPE char30
                                     value         TYPE any
                           RETURNING VALUE(result) TYPE REF TO zcl_result.
-    METHODS get_all_metadata RETURNING VALUE(metadata) TYPE ztt_metadata.
+    METHODS get_all_metadata RETURNING VALUE(metadata) TYPE zcl_result=>ty_metadata.
     METHODS get_metadata IMPORTING key          TYPE char30
                          RETURNING VALUE(value) TYPE REF TO data.
     METHODS get_error_messages RETURNING VALUE(error_messages) TYPE ztt_error_messages
@@ -48,14 +53,14 @@ CLASS zcl_result DEFINITION
     DATA value TYPE REF TO data.
     DATA result_is_ok TYPE abap_bool.
     DATA result_is_failure TYPE abap_bool.
-    DATA metadata TYPE ztt_metadata.
+    DATA metadata TYPE ty_metadata.
     METHODS: constructor IMPORTING is_ok         TYPE abap_bool
                                    value         TYPE any
                                    error_message TYPE string.
     METHODS both_results_are_okay IMPORTING result          TYPE REF TO zcl_result
                                   RETURNING VALUE(r_result) TYPE abap_bool.
     METHODS there_is_nothing_to_combine IMPORTING results       TYPE ty_results
-                                         RETURNING VALUE(result) TYPE abap_bool.
+                                        RETURNING VALUE(result) TYPE abap_bool.
     METHODS it_is_the_first_combination  RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
 
