@@ -139,7 +139,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_multiple_all_are_ok.
-    DATA results TYPE zcl_result=>ty_results.
+    DATA results TYPE zcl_result=>results_type.
 
     DATA(result_one) = zcl_result=>ok( ).
     DATA(result_two) = zcl_result=>ok( ).
@@ -197,7 +197,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_multiple_all_failed.
-    DATA results TYPE zcl_result=>ty_results.
+    DATA results TYPE zcl_result=>results_type.
 
 * arrange
     DATA(result_one) = zcl_result=>fail( error_message ).
@@ -213,7 +213,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_multiple_one_failed.
-    DATA results TYPE zcl_result=>ty_results.
+    DATA results TYPE zcl_result=>results_type.
 
 * arrange
     DATA(result_one) = zcl_result=>ok( ).
@@ -230,7 +230,7 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD combine_multiple_no_entries.
 * the results-table is empty, shouldnt change from OK to Failure.
-    DATA empty_table TYPE zcl_result=>ty_results.
+    DATA empty_table TYPE zcl_result=>results_type.
 
     DATA(result_one) = zcl_result=>ok( ).
 
@@ -266,7 +266,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_multiple_two_failed.
-    DATA results TYPE zcl_result=>ty_results.
+    DATA results TYPE zcl_result=>results_type.
 
 * arrange
     DATA(result_one) = zcl_result=>ok( ).
@@ -407,7 +407,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_can_handle_structures.
-    DATA(structure) = VALUE zcl_result=>ty_metadata_entry( key = 'a' value = REF #( 'random structure' ) ).
+    DATA(structure) = VALUE zcl_result=>metadata_entry_type( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
 
     DATA(value) = result->get_metadata( 'a structure' ).
@@ -429,7 +429,7 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD combine_8_ok_and_failues.
-    DATA results TYPE zcl_result=>ty_results.
+    DATA results TYPE zcl_result=>results_type.
 
 * arrange
     DATA(result_one) = zcl_result=>ok( ).

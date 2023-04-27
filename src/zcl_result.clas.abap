@@ -4,12 +4,13 @@ CLASS zcl_result DEFINITION
   CREATE PRIVATE.
 
   PUBLIC SECTION.
-    TYPES: ty_results TYPE TABLE OF REF TO zcl_result.
-    TYPES: BEGIN OF ty_metadata_entry,
+    TYPES: results_type TYPE TABLE OF REF TO zcl_result.
+    TYPES: BEGIN OF metadata_entry_type,
              key   TYPE char30,
              value TYPE REF TO data,
-           END OF ty_metadata_entry.
-    TYPES ty_metadata TYPE STANDARD TABLE OF  ty_metadata_entry WITH NON-UNIQUE KEY key.
+           END OF metadata_entry_type.
+    TYPES metadata_type TYPE STANDARD TABLE OF metadata_entry_type WITH NON-UNIQUE KEY key.
+    TYPES error_messages_type TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
 
     CLASS-METHODS ok IMPORTING value         TYPE any OPTIONAL
                      RETURNING VALUE(result) TYPE REF TO zcl_result.
@@ -31,15 +32,15 @@ CLASS zcl_result DEFINITION
                               RAISING   zcx_result_is_not_failure.
     METHODS combine_with IMPORTING other_result           TYPE REF TO zcl_result
                          RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
-    METHODS combine_with_these IMPORTING results                TYPE ty_results
+    METHODS combine_with_these IMPORTING results                TYPE results_type
                                RETURNING VALUE(combined_result) TYPE REF TO zcl_result.
     METHODS with_metadata IMPORTING key           TYPE char30
                                     value         TYPE any
                           RETURNING VALUE(result) TYPE REF TO zcl_result.
-    METHODS get_all_metadata RETURNING VALUE(metadata) TYPE zcl_result=>ty_metadata.
+    METHODS get_all_metadata RETURNING VALUE(metadata) TYPE zcl_result=>metadata_type.
     METHODS get_metadata IMPORTING key          TYPE char30
                          RETURNING VALUE(value) TYPE REF TO data.
-    METHODS get_error_messages RETURNING VALUE(error_messages) TYPE ztt_error_messages
+    METHODS get_error_messages RETURNING VALUE(error_messages) TYPE zcl_result=>error_messages_type
                                RAISING   zcx_result_is_not_failure.
     METHODS has_multiple_error_messages
       RETURNING VALUE(has_multiple_error_messages) TYPE abap_bool
@@ -49,17 +50,17 @@ CLASS zcl_result DEFINITION
       RETURNING VALUE(result) TYPE REF TO zcl_result.
 
   PRIVATE SECTION.
-    DATA error_messages TYPE ztt_error_messages.
+    DATA error_messages TYPE error_messages_type.
     DATA value TYPE REF TO data.
     DATA result_is_ok TYPE abap_bool.
     DATA result_is_failure TYPE abap_bool.
-    DATA metadata TYPE ty_metadata.
+    DATA metadata TYPE metadata_type.
     METHODS: constructor IMPORTING is_ok         TYPE abap_bool
                                    value         TYPE any
                                    error_message TYPE string.
     METHODS both_results_are_okay IMPORTING result          TYPE REF TO zcl_result
                                   RETURNING VALUE(r_result) TYPE abap_bool.
-    METHODS there_is_nothing_to_combine IMPORTING results       TYPE ty_results
+    METHODS there_is_nothing_to_combine IMPORTING results       TYPE results_type
                                         RETURNING VALUE(result) TYPE abap_bool.
     METHODS it_is_the_first_combination  RETURNING VALUE(result) TYPE abap_bool.
 ENDCLASS.
