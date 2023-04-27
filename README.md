@@ -165,7 +165,8 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `WITH_ERROR_MESSAGE gets called with an empty message on a FAILURE, it just returns the current result
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a FAILURE, the message will be added to the list of error messages and can be retrieved with `GET_ERROR_MESSAGES`
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a OK-RESULT it doesnt do anything but return the result
-:black_square_button: update the docs :japanese_ogre:
+:white_check_mark: update the docs :japanese_ogre:
+:black_square_button: your awesome idea
 
 As you can see I'm usually commiting after every green test or even more often. I tend to use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
 
