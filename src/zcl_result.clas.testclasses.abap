@@ -327,19 +327,19 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_result_with_table_as_value.
 * arrange
-*    TYPES tt_char10 TYPE TABLE OF string.
-*    DATA random_string TYPE string VALUE '12345'.
-*
-*    DATA(a_random_table) = VALUE string_table( ( random_string ) ( random_string ) ( random_string ) ).
-*
-** Act
-*    DATA(result) = zcl_result=>ok( a_random_table ).
-*    DATA(temporary_value) = result->get_value( ).
-*    DATA(value) = CAST stringtab( temporary_value )->*.
-*
-** assert
-*    DATA(number_of_entries) = lines( value ).
-*    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = 3 act = number_of_entries ).
+    TYPES tt_char10 TYPE TABLE OF string.
+    DATA random_string TYPE string VALUE '12345'.
+
+    DATA(a_random_table) = VALUE string_table( ( random_string ) ( random_string ) ( random_string ) ).
+
+* Act
+    DATA(result) = zcl_result=>ok( a_random_table ).
+    DATA(temporary_value) = result->get_value( ).
+    DATA(value) = CAST stringtab( temporary_value ).
+
+* assert
+    DATA(number_of_entries) = lines( value->* ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = 3 act = number_of_entries ).
   ENDMETHOD.
 
   METHOD all_metadata_can_be_read.
