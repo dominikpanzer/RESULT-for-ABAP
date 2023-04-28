@@ -100,24 +100,23 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_result_with_value.
 * can save a value of a simple data type like char
-    DATA(id_of_created_object) = '0815'.
-    DATA value LIKE id_of_created_object.
+    DATA id_of_created_object TYPE char10 VALUE '0815'.
 
     DATA(result) = zcl_result=>ok( id_of_created_object ).
-    DATA(temporary_value) = result->get_value( ).
-    value = temporary_value->*.
+    DATA(value) = CAST char10( result->get_value( ) )->*.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value ).
   ENDMETHOD.
 
   METHOD ok_result_with_object_as_value.
-* can save a value with a complex datat ype like object reference
-    DATA(random_object_reference) = zcl_result=>ok( ).
+* can save a value with a complex data type like object reference
+    DATA random_object_reference TYPE REF TO zcl_result.
     DATA value TYPE REF TO zcl_result.
+    random_object_reference = zcl_result=>ok( ).
 
     DATA(result) = zcl_result=>ok( random_object_reference ).
     DATA(temporary_value) = result->get_value( ).
-    value = temporary_value->*.
+    value ?= temporary_value->*.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = value ).
   ENDMETHOD.
@@ -318,26 +317,24 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_if_returns_initial_value.
 * OK_IF doesnt support any VALUE, so returns an empty one
-    DATA value TYPE char1.
-
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) ).
-    DATA(temporary_value) = result->get_value( ).
-    value = temporary_value->*.
 
-    cl_abap_unit_assert=>assert_initial( value ).
+    DATA(temporary_value) = result->get_value( ).
+
+    cl_abap_unit_assert=>assert_initial( temporary_value->* ).
   ENDMETHOD.
 
   METHOD ok_result_with_table_as_value.
 * arrange
-    DATA value TYPE TABLE OF char10.
-    DATA a_random_table TYPE TABLE OF char10.
+    TYPES tt_char10 TYPE TABLE OF string.
+    DATA random_string TYPE string VALUE '12345'.
 
-    a_random_table = VALUE #( ( 'one' ) ( 'two' ) ( 'three' ) ).
+    DATA(a_random_table) = VALUE string_table( ( random_string ) ( random_string ) ( random_string ) ).
 
 * Act
     DATA(result) = zcl_result=>ok( a_random_table ).
     DATA(temporary_value) = result->get_value( ).
-    value = temporary_value->*.
+    DATA(value) = CAST stringtab( temporary_value )->*.
 
 * assert
     DATA(number_of_entries) = lines( value ).
@@ -558,4 +555,5 @@ CLASS result_tests IMPLEMENTATION.
   METHOD this_returns_false.
     result = abap_false.
   ENDMETHOD.
+
 ENDCLASS.
