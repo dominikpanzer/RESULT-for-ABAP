@@ -537,6 +537,7 @@ CLASS result_tests IMPLEMENTATION.
 
     DATA(error) = result->get_error_message( ).
 
+
     cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error ).
   ENDMETHOD.
 
