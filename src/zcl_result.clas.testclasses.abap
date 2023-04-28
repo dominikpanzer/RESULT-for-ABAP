@@ -103,9 +103,10 @@ CLASS result_tests IMPLEMENTATION.
     DATA id_of_created_object TYPE char10 VALUE '0815'.
 
     DATA(result) = zcl_result=>ok( id_of_created_object ).
-    DATA(value) = CAST char10( result->get_value( ) )->*.
+    DATA(temporary_value) = result->get_value( ).
+    DATA(value) = CAST char10( temporary_value ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value->* ).
   ENDMETHOD.
 
   METHOD ok_result_with_object_as_value.
