@@ -30,6 +30,9 @@ result = zcl_result=>ok( 100040340 ).
 * read the information again. You need to know the type of the value. that's the downside of a RESULT
 DATA new_partner TYPE bu_partner.
 new_partner = result->get_value( )->*.
+* on older systems you can't directly dereference the value
+DATA(temporary_reference) = result->get_value( ).
+object_instance ?= temporary_reference->*.
 * when a validator returns false
 result = zcl_result=>fail_if( validator_returns_false( ) ).
 * when a validator returns false + error message
