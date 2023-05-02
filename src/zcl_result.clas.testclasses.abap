@@ -111,15 +111,21 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_result_with_object_as_value.
 * can save a value with a complex data type like object reference
+*
+* in modern abap-systems also this more readable solution is possible:
+* data class type zcl_yourclass.
+* class = result->get_value( )->*.
     DATA random_object_reference TYPE REF TO zcl_result.
-    DATA value TYPE REF TO zcl_result.
+    DATA temporary_value TYPE REF TO data.
+    FIELD-SYMBOLS <value> TYPE REF TO zcl_result.
+
     random_object_reference = zcl_result=>ok( ).
-
     DATA(result) = zcl_result=>ok( random_object_reference ).
-    DATA(temporary_value) = result->get_value( ).
-    value ?= temporary_value->*.
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = value ).
+    temporary_value = result->get_value( ).
+
+    ASSIGN temporary_value->* TO <value>.
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = <value> ).
   ENDMETHOD.
 
   METHOD failed_result_with_error.
@@ -318,11 +324,18 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_if_returns_initial_value.
 * OK_IF doesnt support any VALUE, so returns an empty one
+*
+* in newer systems also this is possible:
+*  DATA(temporary_value) = result->get_value( ).
+*  cl_abap_unit_assert=>assert_initial( temporary_value->* ).
+    DATA temporary_value TYPE REF TO data.
+    FIELD-SYMBOLS <value> TYPE any.
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) ).
 
-    DATA(temporary_value) = result->get_value( ).
+    temporary_value = result->get_value( ).
 
-    cl_abap_unit_assert=>assert_initial( temporary_value->* ).
+    ASSIGN temporary_value->* TO <value>.
+    cl_abap_unit_assert=>assert_initial( <value> ).
   ENDMETHOD.
 
   METHOD ok_result_with_table_as_value.
@@ -350,10 +363,15 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD one_metadata_entry_can_be_read.
-    DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = 'David Hasselhoff' ).
-    DATA(value) = result->get_metadata( key = 'name' ).
+* in newer systems also this is possible:
+* DATA(value) = result->get_metadata( key = 'name' ).
+* cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
+    DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = |David Hasselhoff| ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
+    DATA(temporary_value) = result->get_metadata( key = 'name' ).
+
+    DATA(value) = CAST string( temporary_value ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = |David Hasselhoff| act = value->* ).
   ENDMETHOD.
 
   METHOD initial_metadata_table.
@@ -404,12 +422,16 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_can_handle_structures.
+* in newer systems also this is possible:
+*   DATA(value) = result->get_metadata( 'a structure' ).
+*   cl_abap_unit_assert=>assert_equals( msg = 'Metadata not stored' exp = structure act = value->* ).
     DATA(structure) = VALUE zcl_result=>metadata_entry_type( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
 
-    DATA(value) = result->get_metadata( 'a structure' ).
+    DATA(temporary_value) = result->get_metadata( 'a structure' ).
+    DATA(value) = CAST zcl_result=>metadata_entry_type( temporary_value ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Metdata not stored' exp = structure act = value->* ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metadata not stored' exp = structure act = value->* ).
   ENDMETHOD.
 
   METHOD failures_two_errormsgs_stored.
