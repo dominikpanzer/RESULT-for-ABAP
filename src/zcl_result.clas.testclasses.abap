@@ -111,10 +111,6 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_result_with_object_as_value.
 * can save a value with a complex data type like object reference
-*
-* in modern abap-systems also this more readable solution is possible:
-* data class type zcl_yourclass.
-* class = result->get_value( )->*.
     DATA random_object_reference TYPE REF TO zcl_result.
     DATA temporary_value TYPE REF TO data.
     FIELD-SYMBOLS <value> TYPE REF TO zcl_result.
@@ -324,10 +320,6 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD ok_if_returns_initial_value.
 * OK_IF doesnt support any VALUE, so returns an empty one
-*
-* in newer systems also this is possible:
-*  DATA(temporary_value) = result->get_value( ).
-*  cl_abap_unit_assert=>assert_initial( temporary_value->* ).
     DATA temporary_value TYPE REF TO data.
     FIELD-SYMBOLS <value> TYPE any.
     DATA(result) = zcl_result=>ok_if( this_is_true = this_returns_true( ) ).
@@ -363,9 +355,6 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD one_metadata_entry_can_be_read.
-* in newer systems also this is possible:
-* DATA(value) = result->get_metadata( key = 'name' ).
-* cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'name' value = |David Hasselhoff| ).
 
     DATA(temporary_value) = result->get_metadata( key = 'name' ).
@@ -422,9 +411,6 @@ CLASS result_tests IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD metadata_can_handle_structures.
-* in newer systems also this is possible:
-*   DATA(value) = result->get_metadata( 'a structure' ).
-*   cl_abap_unit_assert=>assert_equals( msg = 'Metadata not stored' exp = structure act = value->* ).
     DATA(structure) = VALUE zcl_result=>metadata_entry_type( key = 'a' value = REF #( 'random structure' ) ).
     DATA(result) = zcl_result=>ok( )->with_metadata( key = 'a structure' value = structure ).
 
