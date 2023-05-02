@@ -393,11 +393,12 @@ CLASS result_tests IMPLEMENTATION.
 
   METHOD metadata_with_empty_key.
 * an empty key is a valid key
-    DATA(result) = zcl_result=>ok( )->with_metadata( key = '' value = 'David Hasselhoff' ).
+    DATA(result) = zcl_result=>ok( )->with_metadata( key = '' value = |David Hasselhoff| ).
 
-    DATA(value) = result->get_metadata( key = '' ).
+    DATA(temporary_value) = result->get_metadata( key = '' ).
+    DATA(value) = CAST string( temporary_value ).
 
-    cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = 'David Hasselhoff' act = value->* ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Metdata entry could not be received' exp = |David Hasselhoff| act = value->* ).
   ENDMETHOD.
 
   METHOD more_than_one_metadata_entry.
