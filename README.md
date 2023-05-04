@@ -28,18 +28,20 @@ result = zcl_result=>ok( ).
 * another one with additional information ("value", i.e. the key of an object you created or the object itself
 result = zcl_result=>ok( 100040340 ).
 * read the information again. You need to know the type of the value. that's the downside of a RESULT
+* get_value can give you a reference, which works smoothly on new systems
 DATA new_partner TYPE bu_partner.
 new_partner = result->get_value( )->*.
-* on older systems you can't directly dereference the value
-DATA(temporary_reference) = result->get_value( ).
-object_instance ?= temporary_reference->*.
-* when a validator returns false
+* or it can give you direct access via the EXPORTING-Parameter, which is comfortable on 7.5x-systems
+result->get_value( importing value = new_partner ).
+* a result can be generated for example based on a validator-value. FAIL_IF will create a FAILURE,
+* whenever the validator returns TRUE. when the validator returns FALSE, its an OK-RESULT
 result = zcl_result=>fail_if( validator_returns_false( ) ).
-* when a validator returns false + error message
+* when a validator returns false and you can add an error message, it will be used if the RESULT is a FAILURE,
+* otherwise its an OK-RESULT, like in this example
 result = zcl_result=>fail_if( this_is_true = validator_returns_false( ) error_message = 'a wild error occurred' ).
-* when a validator returns true
+* when a validator returns true, it will be an OK-RESULT
 result = zcl_result=>ok_if( validator_returns_true( ) ).
-* when a validator returns true
+* when a validator returns true its OK. but if the validator would fails, it is a FAILURE with an error message
 result = zcl_result=>ok_if( this_is_true = validator_returns_true( ) error_message = 'a wild error occurred' ).
 ```
 ### Creating failures
@@ -170,6 +172,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a FAILURE, the message will be added to the list of error messages and can be retrieved with `GET_ERROR_MESSAGES`
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a OK-RESULT it doesnt do anything but return the result
 :white_check_mark: update the docs :japanese_ogre:
+:white_check_mark: get_value has `RETURNING` and `EXPORTING` paramaters to make handling easier on 7.5x-systems
 :black_square_button: your awesome idea
 
 As you can see I'm usually commiting after every green test or even more often. I tend to use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
