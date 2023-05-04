@@ -130,9 +130,9 @@ CLASS result_tests IMPLEMENTATION.
     random_object_reference = zcl_result=>ok( ).
     DATA(result) = zcl_result=>ok( random_object_reference ).
 
-    CALL METHOD result->get_value( IMPORTING value = value ).
+    result->get_value( IMPORTING value = value ).
 
-    DATA(temporary_value) =  result->get_value( ).
+    DATA(temporary_value) = result->get_value( ).
     ASSIGN temporary_value->* TO <value>.
 
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = <value> ).
@@ -560,7 +560,6 @@ CLASS result_tests IMPLEMENTATION.
     DATA(result) = zcl_result=>fail( )->with_error_message( error_message ).
 
     DATA(error) = result->get_error_message( ).
-
 
     cl_abap_unit_assert=>assert_equals( msg = 'Should be an error' exp = me->error_message act = error ).
   ENDMETHOD.

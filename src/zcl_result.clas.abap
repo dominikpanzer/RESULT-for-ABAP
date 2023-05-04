@@ -158,7 +158,7 @@ CLASS zcl_result IMPLEMENTATION.
       value = space.
       EXIT.
     ENDIF.
-    IF value IS REQUESTED.
+    IF value IS SUPPLIED.
       value = me->value->*.
     ENDIF.
     value_reference = me->value.
