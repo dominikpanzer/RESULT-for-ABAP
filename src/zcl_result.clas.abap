@@ -26,7 +26,8 @@ CLASS zcl_result DEFINITION
       RETURNING VALUE(result) TYPE REF TO zcl_result.
     METHODS is_failure RETURNING VALUE(is_failure) TYPE abap_bool.
     METHODS is_ok RETURNING VALUE(is_ok) TYPE abap_bool.
-    METHODS get_value RETURNING VALUE(value) TYPE REF TO data
+    METHODS get_value EXPORTING value                  TYPE any
+                      RETURNING VALUE(value_reference) TYPE REF TO data
                       RAISING   zcx_result_is_not_ok.
     METHODS get_error_message RETURNING VALUE(error_message) TYPE string
                               RAISING   zcx_result_is_not_failure.
@@ -151,11 +152,16 @@ CLASS zcl_result IMPLEMENTATION.
     IF is_failure( ).
       RAISE EXCEPTION TYPE zcx_result_is_not_ok.
     ENDIF.
+
     IF me->value IS NOT BOUND.
-      value = REF #( space ).
-    ELSE.
-      value = me->value.
+      value_reference = REF #( space ).
+      value = space.
+      EXIT.
     ENDIF.
+    IF value IS REQUESTED.
+      value = me->value->*.
+    ENDIF.
+    value_reference = me->value.
   ENDMETHOD.
 
   METHOD get_error_message.

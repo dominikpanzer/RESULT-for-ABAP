@@ -12,7 +12,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS create_ok_result_check_failed FOR TESTING.
     METHODS create_failed_result FOR TESTING.
     METHODS create_failed_result_check_ok FOR TESTING.
-    METHODS ok_result_with_value FOR TESTING.
+    METHODS ok_result_with_value_ref FOR TESTING.
     METHODS failed_result_with_error FOR TESTING.
     METHODS combine_with_one_all_are_ok FOR TESTING.
     METHODS combine_multiple_all_are_ok FOR TESTING.
@@ -57,6 +57,7 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
     METHODS with_error_message_on_failure FOR TESTING.
     METHODS with_error_message_on_ok FOR TESTING.
     METHODS get_error_msgs_throws_for_ok FOR TESTING.
+    METHODS ok_result_with_value FOR TESTING RAISING cx_static_check.
 
     METHODS this_returns_true RETURNING VALUE(result) TYPE abap_bool.
     METHODS this_returns_false RETURNING VALUE(result) TYPE abap_bool.
@@ -98,7 +99,7 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'ok, but it should be failed' exp = abap_false act = is_result_ok ).
   ENDMETHOD.
 
-  METHOD ok_result_with_value.
+  METHOD ok_result_with_value_ref.
 * can save a value of a simple data type like char
     DATA id_of_created_object TYPE char10 VALUE '0815'.
 
@@ -109,19 +110,33 @@ CLASS result_tests IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value->* ).
   ENDMETHOD.
 
+  METHOD ok_result_with_value.
+* can save a value of a simple data type like char
+    DATA id_of_created_object TYPE char10 VALUE '0815'.
+    DATA value TYPE char10.
+
+    DATA(result) = zcl_result=>ok( id_of_created_object ).
+    result->get_value( IMPORTING value = value ).
+
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = id_of_created_object act = value ).
+  ENDMETHOD.
+
   METHOD ok_result_with_object_as_value.
 * can save a value with a complex data type like object reference
     DATA random_object_reference TYPE REF TO zcl_result.
-    DATA temporary_value TYPE REF TO data.
+    DATA: value TYPE REF TO zcl_result.
     FIELD-SYMBOLS <value> TYPE REF TO zcl_result.
 
     random_object_reference = zcl_result=>ok( ).
     DATA(result) = zcl_result=>ok( random_object_reference ).
 
-    temporary_value = result->get_value( ).
+    CALL METHOD result->get_value( IMPORTING value = value ).
 
+    DATA(temporary_value) =  result->get_value( ).
     ASSIGN temporary_value->* TO <value>.
+
     cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = <value> ).
+    cl_abap_unit_assert=>assert_equals( msg = 'Couldnt access value' exp = random_object_reference act = value ).
   ENDMETHOD.
 
   METHOD failed_result_with_error.
