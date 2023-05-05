@@ -149,6 +149,8 @@ CLASS zcl_result IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_value.
+    FIELD-SYMBOLS: <dereferenced_value> TYPE any.
+
     IF is_failure( ).
       RAISE EXCEPTION TYPE zcx_result_is_not_ok.
     ENDIF.
@@ -159,7 +161,8 @@ CLASS zcl_result IMPLEMENTATION.
       EXIT.
     ENDIF.
     IF value IS SUPPLIED.
-      value = me->value->*.
+      ASSIGN me->value->* TO <dereferenced_value>.
+      value = <dereferenced_value>.
     ENDIF.
     value_reference = me->value.
   ENDMETHOD.
