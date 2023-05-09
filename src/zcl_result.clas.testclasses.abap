@@ -5,7 +5,6 @@ CLASS result_tests DEFINITION FINAL FOR TESTING
   RISK LEVEL HARMLESS.
   PUBLIC SECTION.
 
-
   PRIVATE SECTION.
     DATA error_message TYPE string VALUE 'A wild error occurred!'.
     METHODS create_ok_result FOR TESTING.
