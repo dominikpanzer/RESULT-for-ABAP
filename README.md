@@ -6,6 +6,9 @@
 
 Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Result-Pattern. It's a way to solve a common problem: a method-call can be successful (OK) or it can fail (FAILURE) and the caller needs to know.  The Result-Pattern indicates if the operation was successful or failed without the usage of exceptions. It is a quite common pattern in functional languages.
 
+## Give a Star! :star:
+If you like or are using this project please give it a star. Thanks!
+
 ## Why should I use RESULT for ABAP instead of exceptions?
 * Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc. When you expect something (like the user entering wrong/invalid data) than it is actually no case for an exception. You actaully seem to expect that users quite often are creative when entering data.
 * Exception are often being used as a fancy form of the [GOTO-statement](https://en.wikipedia.org/wiki/Considered_harmful). You often don't know where they will be caught. If they get caught at all. This has been considered harmful in 1968.
