@@ -1,6 +1,6 @@
 CLASS zcx_result_is_not_failure DEFINITION
   PUBLIC
-  INHERITING FROM cx_static_check
+  INHERITING FROM cx_no_check
   FINAL
   CREATE PUBLIC .
 
