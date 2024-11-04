@@ -10,9 +10,9 @@ Hi! "RESULT for ABAP" is - surprise, surprise - an ABAP implementation of the Re
 If you like or are using this project please give it a star. Thanks!
 
 ## Why should I use RESULT for ABAP instead of exceptions?
-* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc. When you expect something (like the user entering wrong/invalid data) than it is actually no case for an exception. You actaully seem to expect that users quite often are creative when entering data.
+* Exceptions are actually only for... well, exceptional cases, like DB errors, locks etc. not for "domain errors" like validations etc. When you expect something (like the user entering wrong/invalid data) than it is actually no case for an exception. You actually seem to expect that users quite often are creative when entering data.
 * Exception are often being used as a fancy form of the [GOTO-statement](https://en.wikipedia.org/wiki/Considered_harmful). You often don't know where they will be caught. If they get caught at all. This has been considered harmful in 1968.
-* If a method throw can throw an exception and the calling code does not directly catch it - was this a mistake or on purpose? Will it be catch somewhere up the callstack? You never know, so have fun analyzing the whole stack.
+* If a method can throw an exception and the calling code does not directly catch it - was this a mistake or on purpose? Will it be catch somewhere up the callstack? You never know, so have fun analyzing the whole stack.
 * Exceptions lead to hard to read code, because regular business logic is mixed with technical error handling via TRY...CATCH-blocks, for example when many different exceptions have to be caught.
 * Exceptions sometimes are not really helpful, because people tend to wrap all code into a TRY...CATCH-block for CX_ROOT. This can lead to inconsistent data, because a part of the data might already have been processed and persisted. It would be actually better to shortdump.
 * Exceptions tend to return only one error, but what if you have multiple errors?
@@ -143,10 +143,10 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 |Test List|
 |----|
 :white_check_mark: first release somehow seems to works
-:white_check_mark: when `FAIL_IF` gets called with an optional error message "a wild error occured", the error message gets stored when the RESULT is a failure
+:white_check_mark: when `FAIL_IF` gets called with an optional error message "a wild error occurred", the error message gets stored when the RESULT is a failure
 :white_check_mark: when `FAIL_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return "a wild error occurred" when the RESULT is a failure
 :white_check_mark: when `FAIL_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return an exception, when the RESULT is OK
-:white_check_mark: when `OK_IF` gets called with an optional error message "a wild error occured", the error message gets stored when the RESULT is a failure
+:white_check_mark: when `OK_IF` gets called with an optional error message "a wild error occurred", the error message gets stored when the RESULT is a failure
 :white_check_mark: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return "a wild error occurred" when the RESULT is a failure
 :white_check_mark: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_ERROR_MESSAGE` will return an exception, when the RESULT is OK
 :white_check_mark: when `OK_IF` has been called with an optional error message "a wild error occurred", `GET_VALUE` a initial value when the RESULT is OK
@@ -158,7 +158,7 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when the method `GET_ALL_METADATA( )` gets called without `WITH_METDATA` being called before, it returns an initial table
 :white_check_mark: when the method `GET_METADATA( date )` gets called after `WITH_METADATA( key = "name" value = "David Hasselhoff" )`, it returns an initial value
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = "David Hasselhoff" )` is called with the same key twice, no duplicates get stored and it throws
-:white_check_mark: when the method `WITH_METADATA` is called with an initial key then thats okay
+:white_check_mark: when the method `WITH_METADATA` is called with an initial key then that is okay
 :white_check_mark: when the method `WITH_METADATA` is called twice with different keys `( key = "name" value = "David Hasselhoff" ) ( key = "name2" value = "David Hasselhoff" )`, both values get stored
 :white_check_mark: when the method `WITH_METADATA( key = "name" value = value )` and value a structure, a structure will be returned by get_metadata( name ).
 :white_check_mark: update the docs :japanese_ogre:
@@ -168,17 +168,17 @@ I like to create a simple [acceptance test list](https://agiledojo.de/2018-12-16
 :white_check_mark: when `GET_ERROR_MESSAGE` gets called on a FAILURE it returns only the first error message
 :white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is no error_message for a FAILURE
 :white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns false when there is only one error_message for a FAILURE
-:white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple erorr_messages for a FAILURE
+:white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` returns true when there a multiple error_messages for a FAILURE
 :white_check_mark: `HAS_MULTIPLE_ERROR_MESSAGES` throws when OK-RESULT
 :white_check_mark: `GET_ERROR_MESSAGE` throws when OK-RESULT
 :white_check_mark: when `WITH_ERROR_MESSAGE gets called with an empty message on a FAILURE, it just returns the current result
 :white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a FAILURE, the message will be added to the list of error messages and can be retrieved with `GET_ERROR_MESSAGES`
-:white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a OK-RESULT it doesnt do anything but return the result
+:white_check_mark: when `WITH_ERROR_MESSAGE( 'a wild error occurred' )` gets called on a OK-RESULT it does not do anything but return the result
 :white_check_mark: update the docs :japanese_ogre:
-:white_check_mark: get_value has `RETURNING` and `EXPORTING` paramaters to make handling easier on 7.5x-systems
+:white_check_mark: get_value has `RETURNING` and `EXPORTING` parameters to make handling easier on 7.5x-systems
 :black_square_button: your awesome idea
 
-As you can see I'm usually commiting after every green test or even more often. I tend to use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
+As you can see I'm usually committing after every green test or even more often. I tend to use the ´zero, one, multiple´ or the ´happy path, unhappy path´ patterns to write my tests to drive my logic.
 
 ## How to support this project
 
